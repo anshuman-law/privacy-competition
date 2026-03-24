@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consent Under Constraint</title>
+  <meta name="description" content="Interactive student-facing LawLab on consent, platform power, and legal classification." />
+  <style>
+    :root{
+      --bg:#07101c;
+      --bg2:#0d1828;
+      --panel:rgba(17,27,44,.78);
+      --panel2:rgba(21,35,58,.78);
+      --line:rgba(125,185,255,.15);
+      --line2:rgba(125,185,255,.32);
+      --text:#eef4ff;
+      --muted:#a8b7d0;
+      --soft:#7d8da8;
+      --accent:#6ce5ff;
+      --accent2:#8f9dff;
+      --success:#66f1b8;
+      --warn:#ffd36c;
+      --danger:#ff7e98;
+      --shadow:0 24px 60px rgba(0,0,0,.35);
+      --radius-xl:24px;
+      --radius-lg:18px;
+      --radius-md:14px;
+      --radius-sm:10px;
+      --maxw:1280px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:
+      radial-gradient(circle at 12% 18%, rgba(108,229,255,.09), transparent 0 28%),
+      radial-gradient(circle at 88% 14%, rgba(143,157,255,.10), transparent 0 24%),
+      radial-gradient(circle at 50% 90%, rgba(102,241,184,.06), transparent 0 20%),
+      linear-gradient(180deg,#050b14 0%,#0a1322 48%,#07101c 100%);
+      color:var(--text);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height:100%;
+    }
+
+    body::before{
+      content:"";
+      position:fixed; inset:0; pointer-events:none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size:40px 40px;
+      mask-image:radial-gradient(circle at center, black 46%, transparent 88%);
+      opacity:.2;
+    }
+
+    button{font:inherit}
+    .app{
+      width:min(100%, var(--maxw));
+      margin:0 auto;
+      padding:16px;
+      position:relative;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky;
+      top:10px;
+      z-index:20;
+      display:grid;
+      grid-template-columns:1.2fr 1fr auto;
+      gap:14px;
+      align-items:center;
+      padding:14px 16px;
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:rgba(9,18,31,.72);
+      backdrop-filter:blur(14px);
+      box-shadow:var(--shadow);
+      margin-bottom:16px;
+    }
+
+    .brand{
+      display:flex; gap:14px; align-items:center; min-width:0;
+    }
+    .logo{
+      width:48px; height:48px; border-radius:16px;
+      display:grid; place-items:center; flex-shrink:0;
+      border:1px solid var(--line2);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(108,229,255,.24), transparent 45%),
+        linear-gradient(145deg, rgba(108,229,255,.14), rgba(143,157,255,.12));
+    }
+    .logo svg{width:24px;height:24px;stroke:var(--accent)}
+    .eyebrow{
+      color:var(--accent);
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:.72rem;
+      margin-bottom:4px;
+    }
+    .title{
+      margin:0;
+      font-size:1.12rem;
+      font-weight:700;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .subtitle{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:.9rem;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .progress-wrap{min-width:0}
+    .progress-labels{
+      display:flex; justify-content:space-between; gap:10px;
+      color:var(--muted); font-size:.82rem; margin-bottom:8px;
+    }
+    .progress{
+      height:10px;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.05);
+      background:rgba(255,255,255,.06);
+    }
+    .progress-bar{
+      height:100%;
+      width:12%;
+      border-radius:inherit;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      box-shadow:0 0 18px rgba(108,229,255,.4);
+      transition:width .5s ease;
+    }
+
+    .top-actions{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      font-size:.86rem;
+    }
+    .chip strong{color:var(--accent)}
+    .btn{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      color:var(--text);
+      padding:11px 14px;
+      border-radius:14px;
+      font-weight:600;
+      transition:.2s ease;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn.primary{
+      background:linear-gradient(180deg, rgba(108,229,255,.16), rgba(143,157,255,.1));
+      border:1px solid var(--line2);
+    }
+    .btn.ghost{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      color:var(--muted);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:minmax(0, 1.2fr) 340px;
+      gap:16px;
+      align-items:start;
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      border-radius:var(--radius-xl);
+      background:linear-gradient(180deg,var(--panel),var(--panel2));
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      backdrop-filter:blur(12px);
+    }
+
+    .hero{
+      padding:20px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      background:
+        radial-gradient(circle at top right, rgba(108,229,255,.08), transparent 24%),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.025));
+    }
+    .hero .kicker{
+      color:var(--accent);
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:.72rem;
+      margin-bottom:10px;
+    }
+    .hero h1{
+      margin:0 0 10px;
+      font-size:clamp(1.5rem, 2vw, 2rem);
+      line-height:1.08;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.6;
+      max-width:68ch;
+      font-size:.98rem;
+    }
+
+    .content{
+      padding:18px;
+      display:grid;
+      gap:16px;
+    }
+
+    .card{
+      border:1px solid rgba(255,255,255,.07);
+      background:rgba(255,255,255,.035);
+      border-radius:var(--radius-lg);
+      padding:16px;
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute; left:0; top:0; width:100%; height:1px;
+      background:linear-gradient(90deg, rgba(108,229,255,.38), transparent);
+    }
+    .card h2,.card h3,.card h4{margin:0 0 8px}
+    .card p{margin:0; color:var(--muted); line-height:1.55; font-size:.92rem}
+
+    .phone-shell{
+      width:min(100%, 410px);
+      margin:0 auto;
+      border-radius:28px;
+      padding:12px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(4,8,16,.84);
+      box-shadow:0 24px 60px rgba(0,0,0,.42);
+      position:relative;
+    }
+    .phone-shell::before{
+      content:"";
+      position:absolute;
+      top:0; left:50%; transform:translateX(-50%);
+      width:34%; height:20px;
+      background:rgba(4,8,16,.92);
+      border-radius:0 0 16px 16px;
+      border:1px solid rgba(255,255,255,.05);
+      border-top:none;
+    }
+    .phone-screen{
+      overflow:hidden;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.05);
+      background:linear-gradient(180deg,#0e1728 0%, #101d33 100%);
+      min-height:560px;
+      display:flex;
+      flex-direction:column;
+    }
+    .phone-status{
+      padding:12px 16px 8px;
+      display:flex; justify-content:space-between;
+      color:var(--muted); font-size:.76rem;
+    }
+    .screen-head{
+      display:flex; justify-content:space-between; align-items:center;
+      gap:10px; padding:0 16px 16px;
+    }
+    .screen-head strong{display:block; font-size:.95rem}
+    .screen-head span{font-size:.78rem; color:var(--muted)}
+    .screen-badge{
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--accent);
+      font-size:.74rem;
+      white-space:nowrap;
+    }
+
+    .stage{
+      display:none;
+      padding:0 16px 16px;
+      animation:fade .35s ease;
+    }
+    .stage.active{display:block}
+    @keyframes fade{
+      from{opacity:0; transform:translateY(8px)}
+      to{opacity:1; transform:translateY(0)}
+    }
+
+    .trigger-box{
+      padding:16px;
+      border-radius:20px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.06);
+      margin-bottom:16px;
+    }
+    .trigger-box h4{margin:0 0 8px; font-size:1rem}
+    .trigger-box p{margin:0; color:var(--muted); font-size:.88rem; line-height:1.55}
+    .choices{
+      margin-top:14px;
+      display:grid; gap:10px;
+    }
+    .choice{
+      width:100%;
+      text-align:left;
+      padding:13px 14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.035);
+      border:1px solid rgba(255,255,255,.08);
+      color:var(--text);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      transition:.2s ease;
+    }
+    .choice:hover{border-color:rgba(108,229,255,.28); transform:translateY(-1px)}
+    .choice.primary{
+      background:linear-gradient(180deg, rgba(108,229,255,.14), rgba(143,157,255,.10));
+      border-color:rgba(108,229,255,.3);
+    }
+    .choice.selected{
+      border-color:rgba(108,229,255,.42);
+      box-shadow:0 0 0 1px rgba(108,229,255,.18) inset;
+      background:linear-gradient(180deg, rgba(108,229,255,.14), rgba(143,157,255,.10));
+    }
+
+    .question-label{
+      color:var(--accent);
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-size:.72rem;
+      margin-bottom:8px;
+    }
+    .question-title{
+      margin:0 0 14px;
+      font-size:1rem;
+      line-height:1.35;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+    }
+    .option-card{
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.035);
+      border-radius:16px;
+      padding:14px;
+      min-height:90px;
+      cursor:pointer;
+      transition:.2s ease;
+      display:flex; flex-direction:column; justify-content:space-between;
+    }
+    .option-card:hover{transform:translateY(-1px); border-color:rgba(108,229,255,.26)}
+    .option-card.active{
+      border-color:rgba(108,229,255,.4);
+      box-shadow:0 0 0 1px rgba(108,229,255,.18) inset;
+      background:linear-gradient(180deg, rgba(108,229,255,.10), rgba(143,157,255,.07));
+    }
+    .option-card .tag{
+      color:var(--soft);
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-size:.72rem;
+    }
+    .option-card strong{
+      font-size:.94rem;
+      line-height:1.28;
+    }
+
+    .fact-reveal{
+      display:grid;
+      gap:12px;
+    }
+    .fact-card{
+      padding:14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.035);
+      opacity:.58;
+      transform:scale(.99);
+      transition:.28s ease;
+    }
+    .fact-card.revealed{
+      opacity:1;
+      transform:scale(1);
+      border-color:rgba(108,229,255,.22);
+      background:linear-gradient(180deg, rgba(108,229,255,.08), rgba(255,255,255,.035));
+    }
+    .fact-top{
+      display:flex; justify-content:space-between; gap:10px; margin-bottom:8px;
+    }
+    .fact-top span{
+      color:var(--accent);
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-size:.72rem;
+    }
+    .fact-card p{
+      margin:0;
+      color:var(--muted);
+      font-size:.87rem;
+      line-height:1.5;
+    }
+    .fact-card strong{
+      display:block;
+      margin-top:10px;
+      font-size:.84rem;
+    }
+
+    .inline-actions{
+      margin-top:14px;
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+
+    .footer{
+      margin-top:auto;
+      padding:18px 16px 16px;
+      background:linear-gradient(180deg, rgba(7,16,28,0), rgba(7,16,28,.92) 28%, rgba(7,16,28,1) 100%);
+    }
+    .footer-inner{
+      display:flex; gap:10px;
+    }
+    .footer-inner .btn{flex:1}
+
+    .side{
+      display:grid; gap:16px;
+    }
+
+    .metric{
+      display:grid; gap:8px;
+      margin-top:12px;
+    }
+    .metric-row{
+      display:flex; justify-content:space-between; gap:12px;
+      color:var(--muted);
+      font-size:.84rem;
+    }
+    .meter{
+      display:flex; gap:6px;
+    }
+    .meter span{
+      flex:1; height:8px; border-radius:999px; background:rgba(255,255,255,.08);
+      transition:.3s ease;
+    }
+    .meter span.on{
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+    }
+
+    .role-switcher{
+      display:grid; gap:10px;
+      margin-top:12px;
+    }
+    .role-btn{
+      width:100%;
+      text-align:left;
+      padding:12px 13px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.035);
+      color:var(--text);
+      cursor:pointer;
+      transition:.2s ease;
+    }
+    .role-btn:hover{transform:translateY(-1px); border-color:rgba(108,229,255,.24)}
+    .role-btn.active{
+      border-color:rgba(108,229,255,.4);
+      background:linear-gradient(180deg, rgba(108,229,255,.1), rgba(143,157,255,.07));
+    }
+
+    .pill-row{
+      display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;
+    }
+    .pill{
+      padding:8px 11px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);
+      color:var(--muted);
+      font-size:.76rem;
+    }
+
+    .summary-box{
+      display:none;
+      margin-top:12px;
+      padding:14px;
+      border-radius:16px;
+      border:1px solid rgba(101,241,184,.18);
+      background:linear-gradient(180deg, rgba(101,241,184,.08), rgba(108,229,255,.04));
+      animation:fade .35s ease;
+    }
+    .summary-box.show{display:block}
+    .summary-box p{margin:0; color:var(--text)}
+    .summary-box .muted{color:var(--muted); margin-top:8px}
+
+    .drawer-toggle{display:none; width:100%}
+    .mobile-side{display:none}
+
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+      .side{display:none}
+      .drawer-toggle{display:block}
+      .mobile-side{display:grid; gap:16px; margin-top:16px}
+      .topbar{grid-template-columns:1fr}
+      .top-actions{justify-content:flex-start}
+    }
+
+    @media (max-width: 720px){
+      .app{padding:12px}
+      .topbar{top:8px; padding:12px; border-radius:18px}
+      .logo{width:42px; height:42px}
+      .title{font-size:1rem}
+      .subtitle{white-space:normal}
+      .content{padding:14px}
+      .hero{padding:16px}
+      .grid-2{grid-template-columns:1fr}
+      .phone-shell{width:100%; padding:10px; border-radius:24px}
+      .footer-inner{flex-direction:column}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7">
+            <path d="M12 3l7.5 4.2v9.6L12 21 4.5 16.8V7.2L12 3Z"></path>
+            <path d="M12 8.4l3.6 2.1v4.2L12 16.8l-3.6-2.1v-4.2L12 8.4Z"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="eyebrow">LawLab</div>
+          <h1 class="title">Consent Under Constraint</h1>
+          <p class="subtitle">Explore how platform power changes the legal meaning of consent.</p>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-labels">
+          <span id="progressStepLabel">Step 1 of 5</span>
+          <span id="progressStageLabel">Trigger</span>
+        </div>
+        <div class="progress">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <div class="chip"><strong>Role</strong> <span id="roleBadge">CCI Officer</span></div>
+        <button class="btn ghost drawer-toggle" id="drawerBtn" type="button">Show Case File</button>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="panel">
+        <div class="hero">
+          <div class="kicker">Interactive legal simulation</div>
+          <h1>When users click “agree,” is the choice legally meaningful?</h1>
+          <p>
+            You are examining a platform policy update. As new facts emerge, your task is to classify the problem,
+            rethink your position, and decide whether law should intervene.
+          </p>
+        </div>
+
+        <div class="content">
+          <div class="phone-shell">
+            <div class="phone-screen">
+              <div class="phone-status">
+                <span>09:41</span>
+                <span>Secure Session</span>
+                <span>87%</span>
+              </div>
+
+              <div class="screen-head">
+                <div>
+                  <strong id="screenTitle">Scenario Prompt</strong>
+                  <span id="screenSubtitle">Read the platform update and respond.</span>
+                </div>
+                <div class="screen-badge" id="stageBadge">Step 1</div>
+              </div>
+
+              <div class="stage active" id="stage1">
+                <div class="trigger-box">
+                  <h4>WhatsApp has updated its privacy terms</h4>
+                  <p>
+                    By continuing, you agree to expanded data-sharing terms across the platform ecosystem.
+                    Continued use requires acceptance of the revised policy.
+                  </p>
+                  <div class="choices">
+                    <button class="choice primary action-choice" data-value="accept" type="button">
+                      <span>Accept and Continue</span><span>→</span>
+                    </button>
+                    <button class="choice action-choice" data-value="learn" type="button">
+                      <span>Learn More</span><span>↗</span>
+                    </button>
+                    <button class="choice action-choice" data-value="exit" type="button">
+                      <span>Exit Platform</span><span>×</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="question-label">Your first reaction</div>
+                <h3 class="question-title">What is your immediate legal instinct?</h3>
+                <div class="grid-2" id="instinctGrid">
+                  <div class="option-card instinct-option" data-value="valid">
+                    <span class="tag">Option</span>
+                    <strong>Valid consent</strong>
+                  </div>
+                  <div class="option-card instinct-option" data-value="privacy">
+                    <span class="tag">Option</span>
+                    <strong>Privacy issue</strong>
+                  </div>
+                  <div class="option-card instinct-option" data-value="competition">
+                    <span class="tag">Option</span>
+                    <strong>Competition issue</strong>
+                  </div>
+                  <div class="option-card instinct-option" data-value="mixed">
+                    <span class="tag">Option</span>
+                    <strong>Mixed regulatory issue</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="stage" id="stage2">
+                <div class="question-label">Fact reveal</div>
+                <h3 class="question-title">New facts change the situation. Reveal them one by one.</h3>
+
+                <div class="fact-reveal">
+                  <div class="fact-card" id="fact1">
+                    <div class="fact-top"><span>Fact 1</span><span>Locked</span></div>
+                    <p>Most of the user’s family, friend groups, and work groups communicate primarily through this platform.</p>
+                    <strong>Signal: social dependence</strong>
+                  </div>
+                  <div class="fact-card" id="fact2">
+                    <div class="fact-top"><span>Fact 2</span><span>Locked</span></div>
+                    <p>Alternative apps exist, but very few contacts actively use them for everyday communication.</p>
+                    <strong>Signal: network effects</strong>
+                  </div>
+                  <div class="fact-card" id="fact3">
+                    <div class="fact-top"><span>Fact 3</span><span>Locked</span></div>
+                    <p>The revised terms are bundled, lengthy, and difficult to understand at the moment of consent.</p>
+                    <strong>Signal: information asymmetry</strong>
+                  </div>
+                </div>
+
+                <div class="inline-actions">
+                  <button class="btn primary" id="revealNextBtn" type="button">Reveal Next Fact</button>
+                  <button class="btn ghost" id="continueToClassifyBtn" type="button" disabled>Continue</button>
+                </div>
+              </div>
+
+              <div class="stage" id="stage3">
+                <div class="question-label">Reclassification</div>
+                <h3 class="question-title">Now that you know more, how should this issue be classified?</h3>
+                <div class="grid-2" id="classificationGrid">
+                  <div class="option-card class-option" data-value="privacy">
+                    <span class="tag">Primary lens</span>
+                    <strong>Privacy law issue</strong>
+                  </div>
+                  <div class="option-card class-option" data-value="competition">
+                    <span class="tag">Primary lens</span>
+                    <strong>Competition law issue</strong>
+                  </div>
+                  <div class="option-card class-option" data-value="contract">
+                    <span class="tag">Primary lens</span>
+                    <strong>Contract / consumer issue</strong>
+                  </div>
+                  <div class="option-card class-option" data-value="mixed">
+                    <span class="tag">Primary lens</span>
+                    <strong>Mixed regulatory issue</strong>
+                  </div>
+                </div>
+
+                <div class="inline-actions">
+                  <button class="btn primary" id="toRoleStageBtn" type="button" disabled>Continue</button>
+                </div>
+              </div>
+
+              <div class="stage" id="stage4">
+                <div class="question-label">Role perspective</div>
+                <h3 class="question-title">Switch roles and see how the legal position changes.</h3>
+
+                <div class="card" style="padding:14px; margin-bottom:12px;">
+                  <h4 id="roleTitle">CCI Officer</h4>
+                  <p id="roleDescription">You are assessing whether the facts raise a plausible competition concern.</p>
+                  <div class="pill-row" id="rolePills"></div>
+                </div>
+
+                <div class="role-switcher" id="roleSwitcher">
+                  <button class="role-btn active" data-role="cci" type="button">CCI Officer</button>
+                  <button class="role-btn" data-role="platform" type="button">Platform Counsel</button>
+                  <button class="role-btn" data-role="user" type="button">User Advocate</button>
+                  <button class="role-btn" data-role="privacyreg" type="button">Privacy Regulator</button>
+                </div>
+
+                <div class="card" style="margin-top:12px;">
+                  <h4>Current Position</h4>
+                  <p id="roleArgument">
+                    The issue may involve more than formal consent. Market structure and user dependence may affect whether choice is genuinely meaningful.
+                  </p>
+                </div>
+
+                <div class="inline-actions">
+                  <button class="btn primary" id="toDecisionStageBtn" type="button">Move to Decision</button>
+                </div>
+              </div>
+
+              <div class="stage" id="stage5">
+                <div class="question-label">Decision</div>
+                <h3 class="question-title">What should happen next?</h3>
+
+                <div class="choices" id="decisionChoices">
+                  <button class="choice decision-option" data-value="none" type="button">
+                    <span>No immediate intervention</span><span>1</span>
+                  </button>
+                  <button class="choice decision-option" data-value="privacy" type="button">
+                    <span>Refer to privacy regulator</span><span>2</span>
+                  </button>
+                  <button class="choice decision-option" data-value="competition" type="button">
+                    <span>Open competition inquiry</span><span>3</span>
+                  </button>
+                  <button class="choice decision-option" data-value="coordinated" type="button">
+                    <span>Coordinated regulatory response</span><span>4</span>
+                  </button>
+                </div>
+
+                <div class="summary-box" id="summaryBox">
+                  <p id="summaryText"></p>
+                  <p class="muted" id="summarySubtext"></p>
+                </div>
+
+                <div class="inline-actions">
+                  <button class="btn primary" id="finishBtn" type="button" disabled>See Outcome</button>
+                  <button class="btn ghost" id="restartBtn" type="button">Restart</button>
+                </div>
+              </div>
+
+              <div class="footer">
+                <div class="footer-inner">
+                  <button class="btn ghost" id="backBtn" type="button">Back</button>
+                  <button class="btn primary" id="nextBtn" type="button">Next</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mobile-side" id="mobileCaseFile"></div>
+        </div>
+      </section>
+
+      <aside class="side">
+        <div class="panel">
+          <div class="content">
+            <div class="card">
+              <h3>Case File</h3>
+              <p>Your decisions update the record as you move through the simulation.</p>
+              <div class="pill-row">
+                <span class="pill" id="pillInstinct">Initial instinct: not chosen</span>
+                <span class="pill" id="pillClassification">Classification: not chosen</span>
+                <span class="pill" id="pillDecision">Decision: not chosen</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>System Signals</h3>
+              <div class="metric">
+                <div class="metric-row"><span>Dominance signal</span><span id="dominanceLabel">Low</span></div>
+                <div class="meter" id="dominanceMeter"><span class="on"></span><span></span><span></span><span></span><span></span></div>
+
+                <div class="metric-row"><span>Switching costs</span><span id="switchingLabel">Low</span></div>
+                <div class="meter" id="switchingMeter"><span class="on"></span><span></span><span></span><span></span><span></span></div>
+
+                <div class="metric-row"><span>Consent clarity</span><span id="clarityLabel">High</span></div>
+                <div class="meter" id="clarityMeter"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>What to watch</h3>
+              <p>
+                As new facts appear, ask whether the user’s “choice” remains genuinely voluntary once market structure,
+                network dependence, and information asymmetry are taken into account.
+              </p>
+              <div class="pill-row">
+                <span class="pill">Meaningful consent</span>
+                <span class="pill">Network effects</span>
+                <span class="pill">Switching costs</span>
+                <span class="pill">Regulatory overlap</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const state = {
+      stage: 1,
+      actionChoice: null,
+      instinct: null,
+      factsRevealed: 0,
+      classification: null,
+      role: "cci",
+      decision: null
+    };
+
+    const roleData = {
+      cci: {
+        title: "CCI Officer",
+        description: "You are assessing whether the facts raise a plausible competition concern.",
+        argument: "The issue may involve more than formal consent. Market structure and user dependence may affect whether choice is genuinely meaningful.",
+        pills: ["Market structure", "User dependence", "Unfair conditions"]
+      },
+      platform: {
+        title: "Platform Counsel",
+        description: "You are defending the policy update as a lawful and voluntary user choice.",
+        argument: "Users remain free to accept, read more, or leave the service. The existence of alternatives weakens any claim of coercion.",
+        pills: ["Formal choice", "Alternative apps", "No forced retention"]
+      },
+      user: {
+        title: "User Advocate",
+        description: "You are arguing that apparent consent may be structurally constrained.",
+        argument: "Formal exit is not meaningful exit when communication networks, family groups, and social participation depend on the platform.",
+        pills: ["Constrained consent", "Social lock-in", "Dependence"]
+      },
+      privacyreg: {
+        title: "Privacy Regulator",
+        description: "You are assessing whether the information and consent process is legally adequate.",
+        argument: "Consent is weakened when terms are opaque, bundled, and difficult to understand at the moment the user is asked to agree.",
+        pills: ["Opacity", "Bundled terms", "Information asymmetry"]
+      }
+    };
+
+    const stageTitles = {
+      1: ["Scenario Prompt", "Read the platform update and respond."],
+      2: ["Fact Reveal", "Unlock structural facts and watch the case change."],
+      3: ["Reclassification", "Re-evaluate the issue in legal terms."],
+      4: ["Role Perspective", "See how institutions frame the same facts differently."],
+      5: ["Decision", "Choose the most appropriate next step."]
+    };
+
+    const stageNames = {
+      1: "Trigger",
+      2: "Fact Reveal",
+      3: "Classification",
+      4: "Role Switch",
+      5: "Decision"
+    };
+
+    const progressMap = {
+      1: 12,
+      2: 35,
+      3: 58,
+      4: 78,
+      5: 100
+    };
+
+    const screenTitle = document.getElementById("screenTitle");
+    const screenSubtitle = document.getElementById("screenSubtitle");
+    const stageBadge = document.getElementById("stageBadge");
+    const progressStepLabel = document.getElementById("progressStepLabel");
+    const progressStageLabel = document.getElementById("progressStageLabel");
+    const progressBar = document.getElementById("progressBar");
+    const roleBadge = document.getElementById("roleBadge");
+    const nextBtn = document.getElementById("nextBtn");
+    const backBtn = document.getElementById("backBtn");
+    const continueToClassifyBtn = document.getElementById("continueToClassifyBtn");
+    const toRoleStageBtn = document.getElementById("toRoleStageBtn");
+    const toDecisionStageBtn = document.getElementById("toDecisionStageBtn");
+    const revealNextBtn = document.getElementById("revealNextBtn");
+    const finishBtn = document.getElementById("finishBtn");
+    const restartBtn = document.getElementById("restartBtn");
+
+    const instinctOptions = [...document.querySelectorAll(".instinct-option")];
+    const actionChoices = [...document.querySelectorAll(".action-choice")];
+    const classOptions = [...document.querySelectorAll(".class-option")];
+    const roleButtons = [...document.querySelectorAll(".role-btn")];
+    const decisionOptions = [...document.querySelectorAll(".decision-option")];
+
+    const roleTitle = document.getElementById("roleTitle");
+    const roleDescription = document.getElementById("roleDescription");
+    const roleArgument = document.getElementById("roleArgument");
+    const rolePills = document.getElementById("rolePills");
+
+    const summaryBox = document.getElementById("summaryBox");
+    const summaryText = document.getElementById("summaryText");
+    const summarySubtext = document.getElementById("summarySubtext");
+
+    const pillInstinct = document.getElementById("pillInstinct");
+    const pillClassification = document.getElementById("pillClassification");
+    const pillDecision = document.getElementById("pillDecision");
+
+    const dominanceLabel = document.getElementById("dominanceLabel");
+    const switchingLabel = document.getElementById("switchingLabel");
+    const clarityLabel = document.getElementById("clarityLabel");
+
+    const dominanceMeter = document.getElementById("dominanceMeter").children;
+    const switchingMeter = document.getElementById("switchingMeter").children;
+    const clarityMeter = document.getElementById("clarityMeter").children;
+
+    const drawerBtn = document.getElementById("drawerBtn");
+    const mobileCaseFile = document.getElementById("mobileCaseFile");
+
+    function updateStageUI() {
+      document.querySelectorAll(".stage").forEach((el, idx) => {
+        el.classList.toggle("active", idx === state.stage - 1);
+      });
+
+      const [title, subtitle] = stageTitles[state.stage];
+      screenTitle.textContent = title;
+      screenSubtitle.textContent = subtitle;
+      stageBadge.textContent = `Step ${state.stage}`;
+      progressStepLabel.textContent = `Step ${state.stage} of 5`;
+      progressStageLabel.textContent = stageNames[state.stage];
+      progressBar.style.width = progressMap[state.stage] + "%";
+
+      backBtn.disabled = state.stage === 1;
+      backBtn.style.opacity = state.stage === 1 ? ".45" : "1";
+
+      if (state.stage === 1) {
+        nextBtn.disabled = !(state.instinct && state.actionChoice);
+      } else if (state.stage === 2) {
+        nextBtn.disabled = true;
+      } else if (state.stage === 3) {
+        nextBtn.disabled = !state.classification;
+      } else if (state.stage === 4) {
+        nextBtn.disabled = false;
+      } else {
+        nextBtn.disabled = true;
+      }
+
+      roleBadge.textContent = roleData[state.role].title;
+      renderMobileCaseFile();
+    }
+
+    function goToStage(num) {
+      state.stage = Math.max(1, Math.min(5, num));
+      updateStageUI();
+    }
+
+    function setOptionActive(options, activeValue) {
+      options.forEach(opt => {
+        const val = opt.dataset.value || opt.dataset.role;
+        opt.classList.toggle("active", val === activeValue);
+        if (opt.classList.contains("choice")) {
+          opt.classList.toggle("selected", val === activeValue);
+        }
+      });
+    }
+
+    actionChoices.forEach(btn => {
+      btn.addEventListener("click", () => {
+        state.actionChoice = btn.dataset.value;
+        setOptionActive(actionChoices, state.actionChoice);
+        updateStageUI();
+      });
+    });
+
+    instinctOptions.forEach(card => {
+      card.addEventListener("click", () => {
+        state.instinct = card.dataset.value;
+        setOptionActive(instinctOptions, state.instinct);
+        pillInstinct.textContent = "Initial instinct: " + labelInstinct(state.instinct);
+        updateStageUI();
+      });
+    });
+
+    classOptions.forEach(card => {
+      card.addEventListener("click", () => {
+        state.classification = card.dataset.value;
+        setOptionActive(classOptions, state.classification);
+        pillClassification.textContent = "Classification: " + labelClassification(state.classification);
+        toRoleStageBtn.disabled = false;
+        updateStageUI();
+      });
+    });
+
+    roleButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        state.role = btn.dataset.role;
+        roleButtons.forEach(b => b.classList.toggle("active", b.dataset.role === state.role));
+        renderRole();
+        updateStageUI();
+      });
+    });
+
+    decisionOptions.forEach(btn => {
+      btn.addEventListener("click", () => {
+        state.decision = btn.dataset.value;
+        setOptionActive(decisionOptions, state.decision);
+        pillDecision.textContent = "Decision: " + labelDecision(state.decision);
+        finishBtn.disabled = false;
+      });
+    });
+
+    revealNextBtn.addEventListener("click", () => {
+      if (state.factsRevealed < 3) {
+        state.factsRevealed += 1;
+        document.getElementById("fact" + state.factsRevealed).classList.add("revealed");
+        updateSignals();
+      }
+
+      if (state.factsRevealed >= 3) {
+        revealNextBtn.disabled = true;
+        revealNextBtn.textContent = "All Facts Revealed";
+        continueToClassifyBtn.disabled = false;
+      }
+    });
+
+    continueToClassifyBtn.addEventListener("click", () => goToStage(3));
+    toRoleStageBtn.addEventListener("click", () => goToStage(4));
+    toDecisionStageBtn.addEventListener("click", () => goToStage(5));
+
+    nextBtn.addEventListener("click", () => {
+      if (state.stage < 5) goToStage(state.stage + 1);
+    });
+
+    backBtn.addEventListener("click", () => {
+      if (state.stage > 1) goToStage(state.stage - 1);
+    });
+
+    finishBtn.addEventListener("click", () => {
+      renderSummary();
+      summaryBox.classList.add("show");
+    });
+
+    restartBtn.addEventListener("click", restartLab);
+
+    drawerBtn.addEventListener("click", () => {
+      if (mobileCaseFile.style.display === "grid") {
+        mobileCaseFile.style.display = "none";
+        drawerBtn.textContent = "Show Case File";
+      } else {
+        mobileCaseFile.style.display = "grid";
+        drawerBtn.textContent = "Hide Case File";
+      }
+    });
+
+    function renderRole() {
+      const data = roleData[state.role];
+      roleTitle.textContent = data.title;
+      roleDescription.textContent = data.description;
+      roleArgument.textContent = data.argument;
+      rolePills.innerHTML = data.pills.map(p => `<span class="pill">${p}</span>`).join("");
+    }
+
+    function updateSignals() {
+      const dominanceLevel = Math.min(1 + state.factsRevealed, 4);
+      const switchingLevel = Math.min(1 + state.factsRevealed, 4);
+      const clarityLevel = Math.max(1, 4 - state.factsRevealed);
+
+      fillMeter(dominanceMeter, dominanceLevel);
+      fillMeter(switchingMeter, switchingLevel);
+      fillMeter(clarityMeter, clarityLevel);
+
+      dominanceLabel.textContent = ["Low", "Moderate", "Elevated", "High", "Very high"][dominanceLevel - 1];
+      switchingLabel.textContent = ["Low", "Moderate", "Elevated", "High", "Very high"][switchingLevel - 1];
+      clarityLabel.textContent = ["Opaque", "Low", "Mixed", "Moderate", "High"][clarityLevel - 1];
+    }
+
+    function fillMeter(nodes, level) {
+      [...nodes].forEach((n, idx) => n.classList.toggle("on", idx < level));
+    }
+
+    function labelInstinct(v) {
+      return {
+        valid: "Valid consent",
+        privacy: "Privacy issue",
+        competition: "Competition issue",
+        mixed: "Mixed regulatory issue"
+      }[v] || "not chosen";
+    }
+
+    function labelClassification(v) {
+      return {
+        privacy: "Privacy law issue",
+        competition: "Competition law issue",
+        contract: "Contract / consumer issue",
+        mixed: "Mixed regulatory issue"
+      }[v] || "not chosen";
+    }
+
+    function labelDecision(v) {
+      return {
+        none: "No immediate intervention",
+        privacy: "Refer to privacy regulator",
+        competition: "Open competition inquiry",
+        coordinated: "Coordinated regulatory response"
+      }[v] || "not chosen";
+    }
+
+    function renderSummary() {
+      let primary = "";
+      let sub = "";
+
+      if (state.decision === "none") {
+        primary = "You decided that the current facts do not yet justify immediate regulatory action.";
+        sub = "This suggests you place greater weight on formal user choice or believe the evidentiary threshold for intervention has not been crossed.";
+      } else if (state.decision === "privacy") {
+        primary = "You decided that the strongest concern lies in the adequacy of notice, consent, and data-use transparency.";
+        sub = "This places the problem primarily within privacy governance, even if market structure remains relevant background context.";
+      } else if (state.decision === "competition") {
+        primary = "You decided that the issue justifies a competition inquiry because market structure may be distorting meaningful choice.";
+        sub = "This means privacy is not just informational, but may also operate as a condition of competition when exit is costly and network dependence is high.";
+      } else if (state.decision === "coordinated") {
+        primary = "You decided that the problem crosses legal domains and requires a coordinated regulatory response.";
+        sub = "This suggests that meaningful analysis must account for both consent quality and the market conditions under which consent is produced.";
+      }
+
+      summaryText.textContent = primary;
+      summarySubtext.textContent = sub;
+    }
+
+    function renderMobileCaseFile() {
+      mobileCaseFile.innerHTML = `
+        <div class="panel">
+          <div class="content">
+            <div class="card">
+              <h3>Case File</h3>
+              <p>Your choices are recorded as you move through the simulation.</p>
+              <div class="pill-row">
+                <span class="pill">${pillInstinct.textContent}</span>
+                <span class="pill">${pillClassification.textContent}</span>
+                <span class="pill">${pillDecision.textContent}</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>System Signals</h3>
+              <div class="metric">
+                <div class="metric-row"><span>Dominance signal</span><span>${dominanceLabel.textContent}</span></div>
+                <div class="metric-row"><span>Switching costs</span><span>${switchingLabel.textContent}</span></div>
+                <div class="metric-row"><span>Consent clarity</span><span>${clarityLabel.textContent}</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function restartLab() {
+      state.stage = 1;
+      state.actionChoice = null;
+      state.instinct = null;
+      state.factsRevealed = 0;
+      state.classification = null;
+      state.role = "cci";
+      state.decision = null;
+
+      setOptionActive(actionChoices, null);
+      setOptionActive(instinctOptions, null);
+      setOptionActive(classOptions, null);
+      setOptionActive(decisionOptions, null);
+
+      roleButtons.forEach(b => b.classList.toggle("active", b.dataset.role === "cci"));
+      document.querySelectorAll(".fact-card").forEach(card => card.classList.remove("revealed"));
+
+      revealNextBtn.disabled = false;
+      revealNextBtn.textContent = "Reveal Next Fact";
+      continueToClassifyBtn.disabled = true;
+      toRoleStageBtn.disabled = true;
+      finishBtn.disabled = true;
+      summaryBox.classList.remove("show");
+
+      pillInstinct.textContent = "Initial instinct: not chosen";
+      pillClassification.textContent = "Classification: not chosen";
+      pillDecision.textContent = "Decision: not chosen";
+
+      fillMeter(dominanceMeter, 1);
+      fillMeter(switchingMeter, 1);
+      fillMeter(clarityMeter, 4);
+      dominanceLabel.textContent = "Low";
+      switchingLabel.textContent = "Low";
+      clarityLabel.textContent = "High";
+
+      renderRole();
+      goToStage(1);
+    }
+
+    renderRole();
+    updateSignals();
+    updateStageUI();
+    renderMobileCaseFile();
+  </script>
+</body>
+</html>
