@@ -3,1503 +3,1587 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Consent Under Constraint</title>
-  <meta name="description" content="Interactive student-facing LawLab on consent, platform power, and legal classification." />
+  <title>WhatsApp Privacy Policy Law Lab</title>
   <style>
-    :root{
-      --bg:#07101c;
-      --bg2:#0d1828;
-      --panel:rgba(17,27,44,.78);
-      --panel2:rgba(21,35,58,.78);
-      --line:rgba(125,185,255,.15);
-      --line2:rgba(125,185,255,.32);
-      --text:#eef4ff;
-      --muted:#a8b7d0;
-      --soft:#7d8da8;
-      --accent:#6ce5ff;
-      --accent2:#8f9dff;
-      --success:#66f1b8;
-      --warn:#ffd36c;
-      --danger:#ff7e98;
-      --shadow:0 24px 60px rgba(0,0,0,.35);
-      --radius-xl:24px;
-      --radius-lg:18px;
-      --radius-md:14px;
-      --radius-sm:10px;
-      --maxw:1320px;
+    :root {
+      --bg: #07111a;
+      --bg-soft: #0d1722;
+      --panel: rgba(255,255,255,0.06);
+      --panel-strong: rgba(255,255,255,0.09);
+      --border: rgba(120, 210, 255, 0.18);
+      --border-strong: rgba(120, 210, 255, 0.35);
+      --text: #ecf7ff;
+      --muted: #9fb5c7;
+      --soft: #7c90a0;
+      --accent: #64d8ff;
+      --accent-2: #95ffca;
+      --danger: #ff7c8f;
+      --warn: #ffcc75;
+      --good: #8ff7a7;
+      --shadow: 0 18px 50px rgba(0,0,0,0.35);
+      --radius: 22px;
+      --radius-sm: 14px;
+      --gap: 16px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    *{box-sizing:border-box}
-    html,body{
-      margin:0;padding:0;
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
       background:
-        radial-gradient(circle at 12% 18%, rgba(108,229,255,.09), transparent 0 28%),
-        radial-gradient(circle at 88% 14%, rgba(143,157,255,.10), transparent 0 24%),
-        radial-gradient(circle at 50% 90%, rgba(102,241,184,.06), transparent 0 20%),
-        linear-gradient(180deg,#050b14 0%,#0a1322 48%,#07101c 100%);
-      color:var(--text);
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      min-height:100%;
+        radial-gradient(circle at top left, rgba(100,216,255,0.08), transparent 26%),
+        radial-gradient(circle at top right, rgba(149,255,202,0.06), transparent 18%),
+        linear-gradient(180deg, #061019 0%, #09131e 100%);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100%;
     }
 
-    body::before{
-      content:"";
-      position:fixed; inset:0; pointer-events:none;
-      background-image:
-        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-      background-size:40px 40px;
-      mask-image:radial-gradient(circle at center, black 46%, transparent 88%);
-      opacity:.2;
+    body {
+      padding: 18px;
     }
 
-    button{font:inherit}
-    .app{
-      width:min(100%, var(--maxw));
-      margin:0 auto;
-      padding:16px;
-      position:relative;
-      z-index:1;
+    .app {
+      max-width: 1500px;
+      margin: 0 auto;
+      display: grid;
+      gap: var(--gap);
     }
 
-    .topbar{
-      position:sticky;
-      top:10px;
-      z-index:20;
-      display:grid;
-      grid-template-columns:1.2fr 1fr auto;
-      gap:14px;
-      align-items:center;
-      padding:14px 16px;
-      border:1px solid var(--line);
-      border-radius:22px;
-      background:rgba(9,18,31,.72);
-      backdrop-filter:blur(14px);
-      box-shadow:var(--shadow);
-      margin-bottom:16px;
+    .glass {
+      background: var(--panel);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
     }
 
-    .brand{
-      display:flex; gap:14px; align-items:center; min-width:0;
-    }
-    .logo{
-      width:48px; height:48px; border-radius:16px;
-      display:grid; place-items:center; flex-shrink:0;
-      border:1px solid var(--line2);
-      background:
-        radial-gradient(circle at 30% 30%, rgba(108,229,255,.24), transparent 45%),
-        linear-gradient(145deg, rgba(108,229,255,.14), rgba(143,157,255,.12));
-    }
-    .logo svg{width:24px;height:24px;stroke:var(--accent)}
-    .eyebrow{
-      color:var(--accent);
-      text-transform:uppercase;
-      letter-spacing:.14em;
-      font-size:.72rem;
-      margin-bottom:4px;
-    }
-    .title{
-      margin:0;
-      font-size:1.12rem;
-      font-weight:700;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .subtitle{
-      margin:4px 0 0;
-      color:var(--muted);
-      font-size:.9rem;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+    .header {
+      padding: 20px;
+      display: grid;
+      gap: 14px;
     }
 
-    .progress-wrap{min-width:0}
-    .progress-labels{
-      display:flex; justify-content:space-between; gap:10px;
-      color:var(--muted); font-size:.82rem; margin-bottom:8px;
-    }
-    .progress{
-      height:10px;
-      border-radius:999px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.05);
-      background:rgba(255,255,255,.06);
-    }
-    .progress-bar{
-      height:100%;
-      width:10%;
-      border-radius:inherit;
-      background:linear-gradient(90deg,var(--accent),var(--accent2));
-      box-shadow:0 0 18px rgba(108,229,255,.4);
-      transition:width .5s ease;
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
-    .top-actions{
-      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center;
-    }
-    .chip{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.04);
-      color:var(--text);
-      font-size:.86rem;
-    }
-    .chip strong{color:var(--accent)}
-    .btn{
-      appearance:none;
-      border:none;
-      cursor:pointer;
-      color:var(--text);
-      padding:11px 14px;
-      border-radius:14px;
-      font-weight:600;
-      transition:.2s ease;
-    }
-    .btn:hover{transform:translateY(-1px)}
-    .btn:disabled{opacity:.45; cursor:not-allowed; transform:none}
-    .btn.primary{
-      background:linear-gradient(180deg, rgba(108,229,255,.16), rgba(143,157,255,.1));
-      border:1px solid var(--line2);
-    }
-    .btn.ghost{
-      background:rgba(255,255,255,.04);
-      border:1px solid var(--line);
-      color:var(--muted);
+    .title-wrap h1 {
+      margin: 0;
+      font-size: clamp(1.55rem, 2.5vw, 2.4rem);
+      line-height: 1.06;
+      letter-spacing: -0.03em;
     }
 
-    .grid{
-      display:grid;
-      grid-template-columns:minmax(0, 1.2fr) 360px;
-      gap:16px;
-      align-items:start;
+    .title-wrap p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      max-width: 820px;
+      line-height: 1.5;
+      font-size: 0.98rem;
     }
 
-    .panel{
-      border:1px solid var(--line);
-      border-radius:var(--radius-xl);
-      background:linear-gradient(180deg,var(--panel),var(--panel2));
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      backdrop-filter:blur(12px);
+    .case-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
-    .hero{
-      padding:20px;
-      border-bottom:1px solid rgba(255,255,255,.06);
-      background:
-        radial-gradient(circle at top right, rgba(108,229,255,.08), transparent 24%),
-        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.025));
-    }
-    .hero .kicker{
-      color:var(--accent);
-      text-transform:uppercase;
-      letter-spacing:.14em;
-      font-size:.72rem;
-      margin-bottom:10px;
-    }
-    .hero h1{
-      margin:0 0 10px;
-      font-size:clamp(1.5rem, 2vw, 2rem);
-      line-height:1.08;
-    }
-    .hero p{
-      margin:0;
-      color:var(--muted);
-      line-height:1.6;
-      max-width:68ch;
-      font-size:.98rem;
+    .tag {
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      color: var(--text);
+      background: rgba(100,216,255,0.1);
+      border: 1px solid rgba(100,216,255,0.22);
+      white-space: nowrap;
     }
 
-    .content{
-      padding:18px;
-      display:grid;
-      gap:16px;
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    .card{
-      border:1px solid rgba(255,255,255,.07);
-      background:rgba(255,255,255,.035);
-      border-radius:var(--radius-lg);
-      padding:16px;
-      position:relative;
-      overflow:hidden;
-    }
-    .card::before{
-      content:"";
-      position:absolute; left:0; top:0; width:100%; height:1px;
-      background:linear-gradient(90deg, rgba(108,229,255,.38), transparent);
-    }
-    .card h2,.card h3,.card h4{margin:0 0 8px}
-    .card p{margin:0; color:var(--muted); line-height:1.55; font-size:.92rem}
-
-    .phone-shell{
-      width:min(100%, 420px);
-      margin:0 auto;
-      border-radius:28px;
-      padding:12px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(4,8,16,.84);
-      box-shadow:0 24px 60px rgba(0,0,0,.42);
-      position:relative;
-    }
-    .phone-shell::before{
-      content:"";
-      position:absolute;
-      top:0; left:50%; transform:translateX(-50%);
-      width:34%; height:20px;
-      background:rgba(4,8,16,.92);
-      border-radius:0 0 16px 16px;
-      border:1px solid rgba(255,255,255,.05);
-      border-top:none;
-    }
-    .phone-screen{
-      overflow:hidden;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,.05);
-      background:linear-gradient(180deg,#0e1728 0%, #101d33 100%);
-      min-height:660px;
-      display:flex;
-      flex-direction:column;
-    }
-    .phone-status{
-      padding:12px 16px 8px;
-      display:flex; justify-content:space-between;
-      color:var(--muted); font-size:.76rem;
-    }
-    .screen-head{
-      display:flex; justify-content:space-between; align-items:center;
-      gap:10px; padding:0 16px 16px;
-    }
-    .screen-head strong{display:block; font-size:.95rem}
-    .screen-head span{font-size:.78rem; color:var(--muted)}
-    .screen-badge{
-      padding:7px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.04);
-      color:var(--accent);
-      font-size:.74rem;
-      white-space:nowrap;
+    .toolbar-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
     }
 
-    .stage{
-      display:none;
-      padding:0 16px 16px;
-      animation:fade .35s ease;
-    }
-    .stage.active{display:block}
-    @keyframes fade{
-      from{opacity:0; transform:translateY(8px)}
-      to{opacity:1; transform:translateY(0)}
+    .pill-label {
+      color: var(--muted);
+      font-size: 0.9rem;
     }
 
-    .trigger-box{
-      padding:16px;
-      border-radius:20px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.06);
-      margin-bottom:16px;
-    }
-    .trigger-box h4{margin:0 0 8px; font-size:1rem}
-    .trigger-box p{margin:0; color:var(--muted); font-size:.88rem; line-height:1.55}
-    .choices{
-      margin-top:14px;
-      display:grid; gap:10px;
-    }
-    .choice{
-      width:100%;
-      text-align:left;
-      padding:13px 14px;
-      border-radius:14px;
-      background:rgba(255,255,255,.035);
-      border:1px solid rgba(255,255,255,.08);
-      color:var(--text);
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      transition:.2s ease;
-    }
-    .choice:hover{border-color:rgba(108,229,255,.28); transform:translateY(-1px)}
-    .choice.primary{
-      background:linear-gradient(180deg, rgba(108,229,255,.14), rgba(143,157,255,.10));
-      border-color:rgba(108,229,255,.3);
-    }
-    .choice.selected{
-      border-color:rgba(108,229,255,.42);
-      box-shadow:0 0 0 1px rgba(108,229,255,.18) inset;
-      background:linear-gradient(180deg, rgba(108,229,255,.14), rgba(143,157,255,.10));
+    select, button, input[type="range"] {
+      font: inherit;
     }
 
-    .question-label{
-      color:var(--accent);
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      font-size:.72rem;
-      margin-bottom:8px;
-    }
-    .question-title{
-      margin:0 0 14px;
-      font-size:1rem;
-      line-height:1.35;
+    select {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      outline: none;
     }
 
-    .grid-2{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:10px;
-    }
-    .option-card{
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.035);
-      border-radius:16px;
-      padding:14px;
-      min-height:90px;
-      cursor:pointer;
-      transition:.2s ease;
-      display:flex; flex-direction:column; justify-content:space-between;
-    }
-    .option-card:hover{transform:translateY(-1px); border-color:rgba(108,229,255,.26)}
-    .option-card.active{
-      border-color:rgba(108,229,255,.4);
-      box-shadow:0 0 0 1px rgba(108,229,255,.18) inset;
-      background:linear-gradient(180deg, rgba(108,229,255,.10), rgba(143,157,255,.07));
-    }
-    .option-card .tag{
-      color:var(--soft);
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      font-size:.72rem;
-    }
-    .option-card strong{
-      font-size:.94rem;
-      line-height:1.28;
+    button {
+      border: 1px solid rgba(100,216,255,0.28);
+      background: linear-gradient(180deg, rgba(100,216,255,0.18), rgba(100,216,255,0.1));
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
     }
 
-    .fact-reveal{
-      display:grid;
-      gap:12px;
-    }
-    .fact-card{
-      padding:14px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.035);
-      opacity:.58;
-      transform:scale(.99);
-      transition:.28s ease;
-    }
-    .fact-card.revealed{
-      opacity:1;
-      transform:scale(1);
-      border-color:rgba(108,229,255,.22);
-      background:linear-gradient(180deg, rgba(108,229,255,.08), rgba(255,255,255,.035));
-    }
-    .fact-top{
-      display:flex; justify-content:space-between; gap:10px; margin-bottom:8px;
-    }
-    .fact-top span{
-      color:var(--accent);
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      font-size:.72rem;
-    }
-    .fact-card p{
-      margin:0;
-      color:var(--muted);
-      font-size:.87rem;
-      line-height:1.5;
-    }
-    .fact-card strong{
-      display:block;
-      margin-top:10px;
-      font-size:.84rem;
+    button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(100,216,255,0.48);
+      background: linear-gradient(180deg, rgba(100,216,255,0.22), rgba(100,216,255,0.13));
     }
 
-    .inline-actions{
-      margin-top:14px;
-      display:flex; gap:10px; flex-wrap:wrap;
+    .main-grid {
+      display: grid;
+      grid-template-columns: 340px 1fr 360px;
+      gap: var(--gap);
+      align-items: start;
     }
 
-    .footer{
-      margin-top:auto;
-      padding:18px 16px 16px;
-      background:linear-gradient(180deg, rgba(7,16,28,0), rgba(7,16,28,.92) 28%, rgba(7,16,28,1) 100%);
-    }
-    .footer-inner{
-      display:flex; gap:10px;
-    }
-    .footer-inner .btn{flex:1}
-
-    .side{
-      display:grid; gap:16px;
+    .panel {
+      padding: 18px;
     }
 
-    .metric{
-      display:grid; gap:8px;
-      margin-top:12px;
-    }
-    .metric-row{
-      display:flex; justify-content:space-between; gap:12px;
-      color:var(--muted);
-      font-size:.84rem;
-    }
-    .meter{
-      display:flex; gap:6px;
-    }
-    .meter span{
-      flex:1; height:8px; border-radius:999px; background:rgba(255,255,255,.08);
-      transition:.3s ease;
-    }
-    .meter span.on{
-      background:linear-gradient(90deg,var(--accent),var(--accent2));
+    .panel h2, .panel h3 {
+      margin: 0 0 10px;
+      letter-spacing: -0.02em;
     }
 
-    .role-switcher{
-      display:grid; gap:10px;
-      margin-top:12px;
-    }
-    .role-btn{
-      width:100%;
-      text-align:left;
-      padding:12px 13px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.035);
-      color:var(--text);
-      cursor:pointer;
-      transition:.2s ease;
-    }
-    .role-btn:hover{transform:translateY(-1px); border-color:rgba(108,229,255,.24)}
-    .role-btn.active{
-      border-color:rgba(108,229,255,.4);
-      background:linear-gradient(180deg, rgba(108,229,255,.1), rgba(143,157,255,.07));
+    .panel h2 {
+      font-size: 1.1rem;
     }
 
-    .pill-row{
-      display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;
-    }
-    .pill{
-      padding:8px 11px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.04);
-      color:var(--muted);
-      font-size:.76rem;
+    .panel h3 {
+      font-size: 1rem;
     }
 
-    .summary-box{
-      display:none;
-      margin-top:12px;
-      padding:14px;
-      border-radius:16px;
-      border:1px solid rgba(101,241,184,.18);
-      background:linear-gradient(180deg, rgba(101,241,184,.08), rgba(108,229,255,.04));
-      animation:fade .35s ease;
-    }
-    .summary-box.show{display:block}
-    .summary-box p{margin:0; color:var(--text)}
-    .summary-box .muted{color:var(--muted); margin-top:8px}
-
-    .drawer-toggle{display:none; width:100%}
-    .mobile-side{display:none}
-
-    .scale-grid{
-      display:grid;
-      gap:12px;
-    }
-    .scale-row{
-      padding:12px;
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:14px;
-      background:rgba(255,255,255,.03);
-    }
-    .scale-head{
-      display:flex; justify-content:space-between; align-items:center; gap:10px;
-      margin-bottom:10px;
-    }
-    .scale-title{
-      font-size:.9rem; font-weight:600;
-    }
-    .scale-level{
-      color:var(--accent); font-size:.82rem;
-    }
-    .segmented{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:8px;
-    }
-    .seg-btn{
-      padding:10px 8px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.03);
-      color:var(--muted);
-      cursor:pointer;
-      font-size:.82rem;
-      text-align:center;
-    }
-    .seg-btn.active{
-      color:var(--text);
-      border-color:rgba(108,229,255,.35);
-      background:linear-gradient(180deg, rgba(108,229,255,.11), rgba(143,157,255,.07));
+    .panel-desc {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.92rem;
     }
 
-    .timeline{
-      display:grid;
-      gap:10px;
-      margin-top:12px;
-    }
-    .timeline-item{
-      display:flex;
-      gap:10px;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.07);
-      background:rgba(255,255,255,.03);
-    }
-    .timeline-dot{
-      width:10px; height:10px; border-radius:50%;
-      background:var(--accent);
-      box-shadow:0 0 14px rgba(108,229,255,.55);
-      margin-top:5px; flex-shrink:0;
-    }
-    .timeline-item strong{
-      display:block; font-size:.88rem; margin-bottom:4px;
-    }
-    .timeline-item span{
-      display:block; color:var(--muted); font-size:.82rem; line-height:1.45;
+    .control-section {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 14px;
     }
 
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
-      .side{display:none}
-      .drawer-toggle{display:block}
-      .mobile-side{display:grid; gap:16px; margin-top:16px}
-      .topbar{grid-template-columns:1fr}
-      .top-actions{justify-content:flex-start}
+    .control-section:last-child {
+      margin-bottom: 0;
     }
 
-    @media (max-width: 720px){
-      .app{padding:12px}
-      .topbar{top:8px; padding:12px; border-radius:18px}
-      .logo{width:42px; height:42px}
-      .title{font-size:1rem}
-      .subtitle{white-space:normal}
-      .content{padding:14px}
-      .hero{padding:16px}
-      .grid-2{grid-template-columns:1fr}
-      .segmented{grid-template-columns:repeat(2,1fr)}
-      .phone-shell{width:100%; padding:10px; border-radius:24px}
-      .footer-inner{flex-direction:column}
+    .control-section h4 {
+      margin: 0 0 12px;
+      font-size: 0.94rem;
+      color: var(--accent-2);
+      letter-spacing: 0.01em;
+    }
+
+    .control {
+      margin-bottom: 14px;
+    }
+
+    .control:last-child {
+      margin-bottom: 0;
+    }
+
+    .control-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 7px;
+      font-size: 0.88rem;
+    }
+
+    .control-head label {
+      color: var(--text);
+    }
+
+    .control-value {
+      color: var(--accent);
+      font-weight: 600;
+      min-width: 34px;
+      text-align: right;
+    }
+
+    .control .sub {
+      color: var(--soft);
+      font-size: 0.78rem;
+      line-height: 1.35;
+      margin-top: 5px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      appearance: none;
+      background: transparent;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(100,216,255,0.3), rgba(149,255,202,0.35));
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      margin-top: -5px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 0 6px rgba(100,216,255,0.12);
+      cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-track {
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(100,216,255,0.3), rgba(149,255,202,0.35));
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 0 6px rgba(100,216,255,0.12);
+      cursor: pointer;
+    }
+
+    .center-stack {
+      display: grid;
+      gap: var(--gap);
+    }
+
+    .phone-shell {
+      max-width: 430px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, #101b27, #0b151f);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 32px;
+      padding: 14px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 30px 70px rgba(0,0,0,0.35);
+    }
+
+    .phone-screen {
+      background: linear-gradient(180deg, #0e1b29 0%, #0c1723 100%);
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(100,216,255,0.08);
+    }
+
+    .wa-topbar {
+      background: linear-gradient(180deg, rgba(100,216,255,0.12), rgba(100,216,255,0.05));
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(100,216,255,0.12);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .wa-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wa-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent-2);
+      box-shadow: 0 0 16px rgba(149,255,202,0.7);
+    }
+
+    .wa-brand-title {
+      font-size: 0.94rem;
+      font-weight: 700;
+    }
+
+    .wa-sub {
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    .wa-body {
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .bubble {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .policy-card {
+      background: linear-gradient(180deg, rgba(100,216,255,0.12), rgba(100,216,255,0.05));
+      border: 1px solid rgba(100,216,255,0.2);
+      border-radius: 20px;
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .policy-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -40px -40px auto;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(149,255,202,0.18), transparent 62%);
+      pointer-events: none;
+    }
+
+    .notice-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: max-content;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--accent-2);
+      font-size: 0.76rem;
+    }
+
+    .policy-title {
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .policy-summary {
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 0.92rem;
+    }
+
+    .policy-meta {
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.83rem;
+    }
+
+    .policy-actions {
+      display: grid;
+      gap: 10px;
+    }
+
+    .action-btn {
+      width: 100%;
+      border-radius: 14px;
+      padding: 12px 14px;
+      text-align: center;
+      font-weight: 700;
+      border: 1px solid transparent;
+    }
+
+    .action-primary {
+      background: linear-gradient(180deg, rgba(149,255,202,0.26), rgba(149,255,202,0.16));
+      border-color: rgba(149,255,202,0.35);
+      color: #eafff3;
+    }
+
+    .action-secondary {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.08);
+      color: var(--text);
+    }
+
+    .action-muted {
+      background: rgba(255,124,143,0.08);
+      border-color: rgba(255,124,143,0.18);
+      color: #ffdce2;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .mini-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .mini-label {
+      color: var(--muted);
+      font-size: 0.76rem;
+      margin-bottom: 6px;
+    }
+
+    .mini-value {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .model-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .metric-card {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .metric-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .metric-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .metric-score {
+      font-size: 0.88rem;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .meter {
+      width: 100%;
+      height: 11px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+      margin-bottom: 8px;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .meter-fill {
+      height: 100%;
+      width: 0;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--danger), var(--warn), var(--good));
+      transition: width 0.28s ease;
+    }
+
+    .metric-desc {
+      color: var(--muted);
+      line-height: 1.42;
+      font-size: 0.8rem;
+    }
+
+    .overall-card {
+      padding: 16px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(100,216,255,0.14), rgba(100,216,255,0.06));
+      border: 1px solid rgba(100,216,255,0.18);
+      display: grid;
+      gap: 10px;
+    }
+
+    .overall-score-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .overall-label {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .overall-score {
+      font-size: clamp(1.6rem, 4vw, 2.3rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .score-badge {
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      width: max-content;
+    }
+
+    .score-low {
+      background: rgba(255,124,143,0.12);
+      color: #ffd9df;
+    }
+
+    .score-mid {
+      background: rgba(255,204,117,0.12);
+      color: #fff0cf;
+    }
+
+    .score-high {
+      background: rgba(143,247,167,0.12);
+      color: #e0ffe8;
+    }
+
+    .reasoning-wrap {
+      display: grid;
+      gap: var(--gap);
+    }
+
+    .tab-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.08);
+      padding: 9px 12px;
+      font-size: 0.9rem;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(180deg, rgba(100,216,255,0.18), rgba(100,216,255,0.1));
+      border-color: rgba(100,216,255,0.32);
+    }
+
+    .tab-panel {
+      display: none;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .tab-panel p {
+      margin: 0 0 12px;
+    }
+
+    .tab-panel p:last-child {
+      margin-bottom: 0;
+    }
+
+    .highlight {
+      color: var(--accent-2);
+      font-weight: 600;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .compare-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .compare-card h4 {
+      margin: 0 0 8px;
+    }
+
+    .compare-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.9rem;
+    }
+
+    .student-prompt {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(149,255,202,0.08);
+      border: 1px solid rgba(149,255,202,0.18);
+    }
+
+    .student-prompt strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .footer-note {
+      color: var(--soft);
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 1180px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .panel.left, .panel.right {
+        order: 0;
+      }
+
+      .panel.center {
+        order: 0;
+      }
+    }
+
+    @media (max-width: 820px) {
+      body {
+        padding: 12px;
+      }
+
+      .header, .panel {
+        padding: 16px;
+      }
+
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar {
+        align-items: stretch;
+      }
+
+      .toolbar-group {
+        width: 100%;
+      }
+
+      select, button {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
   <div class="app">
-    <header class="topbar">
-      <div class="brand">
-        <div class="logo" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7">
-            <path d="M12 3l7.5 4.2v9.6L12 21 4.5 16.8V7.2L12 3Z"></path>
-            <path d="M12 8.4l3.6 2.1v4.2L12 16.8l-3.6-2.1v-4.2L12 8.4Z"></path>
-          </svg>
-        </div>
-        <div>
-          <div class="eyebrow">LawLab</div>
-          <h1 class="title">Consent Under Constraint</h1>
-          <p class="subtitle">Explore how platform power changes the legal meaning of consent.</p>
-        </div>
-      </div>
-
-      <div class="progress-wrap">
-        <div class="progress-labels">
-          <span id="progressStepLabel">Step 1 of 9</span>
-          <span id="progressStageLabel">Trigger</span>
-        </div>
-        <div class="progress">
-          <div class="progress-bar" id="progressBar"></div>
-        </div>
-      </div>
-
-      <div class="top-actions">
-        <div class="chip"><strong>Role</strong> <span id="roleBadge">CCI Officer</span></div>
-        <button class="btn ghost drawer-toggle" id="drawerBtn" type="button">Show Case File</button>
-      </div>
-    </header>
-
-    <main class="grid">
-      <section class="panel">
-        <div class="hero">
-          <div class="kicker">Interactive legal simulation</div>
-          <h1>When users click “agree,” is the choice legally meaningful?</h1>
+    <section class="header glass">
+      <div class="topline">
+        <div class="title-wrap">
+          <h1>WhatsApp Privacy Policy Law Lab</h1>
           <p>
-            You are examining a platform policy update. As new facts and legal questions emerge, your task is to classify the problem,
-            test market power, identify the abuse theory, and decide what law should do next.
+            Explore how notice, consent architecture, network effects, and switching constraints
+            shape user autonomy and competition-law concerns in a take-it-or-leave-it privacy policy update.
           </p>
         </div>
+        <div class="case-tags">
+          <span class="tag">Section 4</span>
+          <span class="tag">Unfair Condition</span>
+          <span class="tag">Dominance</span>
+          <span class="tag">Network Effects</span>
+          <span class="tag">Take-it-or-leave-it</span>
+          <span class="tag">Autonomy Capability</span>
+        </div>
+      </div>
 
-        <div class="content">
+      <div class="toolbar">
+        <div class="toolbar-group">
+          <span class="pill-label">Persona</span>
+          <select id="personaSelect" aria-label="Select persona">
+            <option value="student">Student user</option>
+            <option value="smallbiz">Small business owner</option>
+            <option value="elderly">Elderly family-dependent user</option>
+            <option value="professional">Privacy-conscious professional</option>
+            <option value="gigworker">Gig worker</option>
+          </select>
+        </div>
+
+        <div class="toolbar-group">
+          <span class="pill-label">Legal lens</span>
+          <select id="lensSelect" aria-label="Select legal lens">
+            <option value="competition">Competition law</option>
+            <option value="consumer">Consumer law</option>
+            <option value="data">Data protection</option>
+            <option value="autonomy">Autonomy theory</option>
+          </select>
+        </div>
+
+        <div class="toolbar-group">
+          <button id="resetBtn" type="button">Reset scenario</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="main-grid">
+      <aside class="panel left glass">
+        <h2>Scenario controls</h2>
+        <p class="panel-desc">
+          Adjust the factual environment. Watch how the autonomy-capability model and competition-law reasoning change.
+        </p>
+
+        <div class="control-section">
+          <h4>Policy design</h4>
+
+          <div class="control">
+            <div class="control-head">
+              <label for="noticeVisibility">Notice visibility</label>
+              <span class="control-value" id="noticeVisibilityVal">8</span>
+            </div>
+            <input type="range" id="noticeVisibility" min="0" max="10" value="8" />
+            <div class="sub">How prominent and unavoidable is the update notice?</div>
+          </div>
+
+          <div class="control">
+            <div class="control-head">
+              <label for="reviewTime">Time to review policy</label>
+              <span class="control-value" id="reviewTimeVal">9</span>
+            </div>
+            <input type="range" id="reviewTime" min="0" max="10" value="9" />
+            <div class="sub">A higher score means the user has more time to read and consider the updated policy.</div>
+          </div>
+
+          <div class="control">
+            <div class="control-head">
+              <label for="readability">Policy readability</label>
+              <span class="control-value" id="readabilityVal">5</span>
+            </div>
+            <input type="range" id="readability" min="0" max="10" value="5" />
+            <div class="sub">A higher score means clearer, shorter, and more intelligible policy text.</div>
+          </div>
+
+          <div class="control">
+            <div class="control-head">
+              <label for="partialRefusal">Partial refusal available</label>
+              <span class="control-value" id="partialRefusalVal">0</span>
+            </div>
+            <input type="range" id="partialRefusal" min="0" max="10" value="0" />
+            <div class="sub">Can the user reject some data uses but still continue using the service?</div>
+          </div>
+
+          <div class="control">
+            <div class="control-head">
+              <label for="negotiability">Negotiability of terms</label>
+              <span class="control-value" id="negotiabilityVal">0</span>
+            </div>
+            <input type="range" id="negotiability" min="0" max="10" value="0" />
+            <div class="sub">Can the user contest, negotiate, or shape the updated privacy terms?</div>
+          </div>
+
+          <div class="control">
+            <div class="control-head">
+              <label for="continueWithoutAccept">Continue without accepting</label>
+              <span class="control-value" id="continueWithoutAcceptVal">0</span>
+            </div>
+            <input type="range" id="continueWithoutAccept" min="0" max="10" value="0" />
+            <div class="sub">Can the user keep using WhatsApp while withholding acceptance?</div>
+          </div>
+        </div>
+
+        <div class="control-section">
+          <h4>User context</h4>
+
+          <div class="control">
+            <div class="control-head">
+              <label for="digitalLiteracy">Digital literacy</label>
+              <span class="control-value" id="digitalLiteracyVal">6</span>
+            </div>
+            <input type="range" id="digitalLiteracy" min="0" max="10" value="6" />
+            <div class="sub">Ability to understand privacy settings, data flows, and policy implications.</div>
+          </div>
+
+          <div class="control">
+            <div class="control-head">
+              <label for="privacyConcern">Privacy concern</label>
+              <span class="control-value" id="privacyConcernVal">7</span>
+            </div>
+            <input type="range" id="privacyConcern" min="0" max="10" value="7" />
+            <div class="sub">How much the user values privacy and data control.</div>
+          </div>
+
+          <div class="control">
+            <div class="control-head">
+              <label for="switchTolerance">Tolerance for switching inconvenience</label>
+              <span class="control-value" id="switchToleranceVal">4</span>
+            </div>
+            <input type="range" id="switchTolerance" min="0" max="10" value="4" />
+            <div class="sub">Higher scores mean the user can tolerate friction and effort involved in leaving the platform.</div>
+          </div>
+        </div>
+
+        <div class="control-section">
+          <h4>Market and relational structure</h4>
+
+          <div class="control">
+            <div class="control-head">
+              <label for="networkDependence">Network dependence</label>
+              <span class="control-value" id="networkDependenceVal">9</span>
+            </div>
+            <input type="range" id="networkDependence" min="0" max="10" value="9" />
+            <div class="sub">Dependence on WhatsApp because family, work groups, and contacts remain there.</div>
+          </div>
+
+          <div class="control">
+            <div class="control-head">
+              <label for="switchingCost">Switching cost</label>
+              <span class="control-value" id="switchingCostVal">8</span>
+            </div>
+            <input type="range" id="switchingCost" min="0" max="10" value="8" />
+            <div class="sub">Practical and psychological cost of moving to an alternative service.</div>
+          </div>
+
+          <div class="control">
+            <div class="control-head">
+              <label for="alternativeViability">Alternative platform viability</label>
+              <span class="control-value" id="alternativeViabilityVal">3</span>
+            </div>
+            <input type="range" id="alternativeViability" min="0" max="10" value="3" />
+            <div class="sub">How realistically usable are alternatives such as Signal or Telegram for this user?</div>
+          </div>
+
+          <div class="control">
+            <div class="control-head">
+              <label for="dominance">Market dominance</label>
+              <span class="control-value" id="dominanceVal">9</span>
+            </div>
+            <input type="range" id="dominance" min="0" max="10" value="9" />
+            <div class="sub">The platform’s strength in the relevant communication ecosystem.</div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="panel center glass">
+        <h2>Live platform simulation</h2>
+        <p class="panel-desc">
+          This mock interface visualizes the policy-update event as the student changes the factual scenario.
+        </p>
+
+        <div class="center-stack">
           <div class="phone-shell">
             <div class="phone-screen">
-              <div class="phone-status">
-                <span>09:41</span>
-                <span>Secure Session</span>
-                <span>87%</span>
+              <div class="wa-topbar">
+                <div class="wa-brand">
+                  <div class="wa-dot"></div>
+                  <div>
+                    <div class="wa-brand-title">WhatsApp</div>
+                    <div class="wa-sub">Policy update simulation</div>
+                  </div>
+                </div>
+                <div class="wa-sub" id="caseTimeText">Review window: 9/10</div>
               </div>
 
-              <div class="screen-head">
-                <div>
-                  <strong id="screenTitle">Scenario Prompt</strong>
-                  <span id="screenSubtitle">Read the platform update and respond.</span>
-                </div>
-                <div class="screen-badge" id="stageBadge">Step 1</div>
-              </div>
-
-              <div class="stage active" id="stage1">
-                <div class="trigger-box">
-                  <h4>WhatsApp has updated its privacy terms</h4>
-                  <p>
-                    By continuing, you agree to expanded data-sharing terms across the platform ecosystem.
-                    Continued use requires acceptance of the revised policy.
-                  </p>
-                  <div class="choices">
-                    <button class="choice primary action-choice" data-value="accept" type="button">
-                      <span>Accept and Continue</span><span>→</span>
-                    </button>
-                    <button class="choice action-choice" data-value="learn" type="button">
-                      <span>Learn More</span><span>↗</span>
-                    </button>
-                    <button class="choice action-choice" data-value="exit" type="button">
-                      <span>Exit Platform</span><span>×</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="stage" id="stage2">
-                <div class="question-label">Your first reaction</div>
-                <h3 class="question-title">What is your immediate legal instinct?</h3>
-                <div class="grid-2" id="instinctGrid">
-                  <div class="option-card instinct-option" data-value="valid">
-                    <span class="tag">Option</span>
-                    <strong>Valid consent</strong>
-                  </div>
-                  <div class="option-card instinct-option" data-value="privacy">
-                    <span class="tag">Option</span>
-                    <strong>Privacy issue</strong>
-                  </div>
-                  <div class="option-card instinct-option" data-value="competition">
-                    <span class="tag">Option</span>
-                    <strong>Competition issue</strong>
-                  </div>
-                  <div class="option-card instinct-option" data-value="mixed">
-                    <span class="tag">Option</span>
-                    <strong>Mixed regulatory issue</strong>
-                  </div>
-                </div>
-              </div>
-
-              <div class="stage" id="stage3">
-                <div class="question-label">Fact reveal</div>
-                <h3 class="question-title">Unlock the structural facts one by one.</h3>
-
-                <div class="fact-reveal">
-                  <div class="fact-card" id="fact1">
-                    <div class="fact-top"><span>Fact 1</span><span>Locked</span></div>
-                    <p>Most of the user’s family, friend groups, and work groups communicate primarily through this platform.</p>
-                    <strong>Signal: social dependence</strong>
-                  </div>
-                  <div class="fact-card" id="fact2">
-                    <div class="fact-top"><span>Fact 2</span><span>Locked</span></div>
-                    <p>Alternative apps exist, but very few contacts actively use them for everyday communication.</p>
-                    <strong>Signal: network effects</strong>
-                  </div>
-                  <div class="fact-card" id="fact3">
-                    <div class="fact-top"><span>Fact 3</span><span>Locked</span></div>
-                    <p>The revised terms are bundled, lengthy, and difficult to understand at the moment of consent.</p>
-                    <strong>Signal: information asymmetry</strong>
+              <div class="wa-body">
+                <div class="bubble">
+                  <div class="wa-sub">System notice</div>
+                  <div style="margin-top:6px; font-size:0.92rem; line-height:1.5; color:var(--text);" id="introText">
+                    We have updated our privacy terms. Please review the changes to continue using WhatsApp.
                   </div>
                 </div>
 
-                <div class="inline-actions">
-                  <button class="btn primary" id="revealNextBtn" type="button">Reveal Next Fact</button>
-                </div>
-              </div>
+                <div class="policy-card">
+                  <span class="notice-chip" id="noticeChip">Prominent update notice</span>
 
-              <div class="stage" id="stage4">
-                <div class="question-label">Jurisdiction check</div>
-                <h3 class="question-title">Can competition law still examine this if privacy law is also relevant?</h3>
-                <div class="grid-2">
-                  <div class="option-card jurisdiction-option" data-value="yes">
-                    <span class="tag">Position</span>
-                    <strong>Yes, both can be relevant</strong>
+                  <div class="policy-title">Updated Privacy Policy</div>
+
+                  <div class="policy-summary" id="policySummary">
+                    This policy update explains how your data may be processed across our services. The notice is visible and the user has time to review it, but acceptance is required to continue use.
                   </div>
-                  <div class="option-card jurisdiction-option" data-value="no">
-                    <span class="tag">Position</span>
-                    <strong>No, this belongs only to privacy law</strong>
+
+                  <div class="policy-meta">
+                    <div id="metaReadability">Readability: medium</div>
+                    <div id="metaChoice">Choice architecture: accept or exit</div>
+                    <div id="metaNetwork">Network dependence: very high</div>
                   </div>
-                  <div class="option-card jurisdiction-option" data-value="secondary">
-                    <span class="tag">Position</span>
-                    <strong>Only secondarily, if market power is shown</strong>
-                  </div>
-                  <div class="option-card jurisdiction-option" data-value="uncertain">
-                    <span class="tag">Position</span>
-                    <strong>Uncertain at this stage</strong>
+
+                  <div class="policy-actions" id="policyActions">
+                    <button class="action-btn action-primary" type="button">Accept and continue</button>
+                    <button class="action-btn action-secondary" type="button">Review policy details</button>
+                    <button class="action-btn action-muted" type="button">Exit WhatsApp</button>
                   </div>
                 </div>
-              </div>
 
-              <div class="stage" id="stage5">
-                <div class="question-label">Relevant market</div>
-                <h3 class="question-title">Which market definition fits best?</h3>
-                <div class="grid-2">
-                  <div class="option-card market-option" data-value="all-digital">
-                    <span class="tag">Market</span>
-                    <strong>All digital attention markets</strong>
+                <div class="mini-grid">
+                  <div class="mini-card">
+                    <div class="mini-label">Contestatory options</div>
+                    <div class="mini-value" id="contestOptionsText">Absent</div>
                   </div>
-                  <div class="option-card market-option" data-value="social-media">
-                    <span class="tag">Market</span>
-                    <strong>Online social media generally</strong>
+                  <div class="mini-card">
+                    <div class="mini-label">Exit environment</div>
+                    <div class="mini-value" id="exitEnvText">Relationally costly</div>
                   </div>
-                  <div class="option-card market-option" data-value="communication">
-                    <span class="tag">Market</span>
-                    <strong>Consumer communication services</strong>
+                  <div class="mini-card">
+                    <div class="mini-label">Core tension</div>
+                    <div class="mini-value" id="tensionText">Visible notice, narrow choice</div>
                   </div>
-                  <div class="option-card market-option" data-value="ott-msg">
-                    <span class="tag">Market</span>
-                    <strong>OTT messaging apps through smartphones in India</strong>
-                  </div>
-                </div>
-              </div>
-
-              <div class="stage" id="stage6">
-                <div class="question-label">Dominance assessment</div>
-                <h3 class="question-title">Score the structural factors.</h3>
-                <div class="scale-grid">
-                  <div class="scale-row" data-factor="network">
-                    <div class="scale-head">
-                      <div class="scale-title">Network effects</div>
-                      <div class="scale-level" id="networkLevel">Not selected</div>
-                    </div>
-                    <div class="segmented">
-                      <button class="seg-btn" data-factor="network" data-value="1" type="button">Low</button>
-                      <button class="seg-btn" data-factor="network" data-value="2" type="button">Moderate</button>
-                      <button class="seg-btn" data-factor="network" data-value="3" type="button">High</button>
-                      <button class="seg-btn" data-factor="network" data-value="4" type="button">Very high</button>
-                    </div>
-                  </div>
-
-                  <div class="scale-row" data-factor="lockin">
-                    <div class="scale-head">
-                      <div class="scale-title">Switching costs / lock-in</div>
-                      <div class="scale-level" id="lockinLevel">Not selected</div>
-                    </div>
-                    <div class="segmented">
-                      <button class="seg-btn" data-factor="lockin" data-value="1" type="button">Low</button>
-                      <button class="seg-btn" data-factor="lockin" data-value="2" type="button">Moderate</button>
-                      <button class="seg-btn" data-factor="lockin" data-value="3" type="button">High</button>
-                      <button class="seg-btn" data-factor="lockin" data-value="4" type="button">Very high</button>
-                    </div>
-                  </div>
-
-                  <div class="scale-row" data-factor="data">
-                    <div class="scale-head">
-                      <div class="scale-title">Data advantage</div>
-                      <div class="scale-level" id="dataLevel">Not selected</div>
-                    </div>
-                    <div class="segmented">
-                      <button class="seg-btn" data-factor="data" data-value="1" type="button">Low</button>
-                      <button class="seg-btn" data-factor="data" data-value="2" type="button">Moderate</button>
-                      <button class="seg-btn" data-factor="data" data-value="3" type="button">High</button>
-                      <button class="seg-btn" data-factor="data" data-value="4" type="button">Very high</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="stage" id="stage7">
-                <div class="question-label">Abuse theory</div>
-                <h3 class="question-title">Which theory of abuse is strongest?</h3>
-                <div class="grid-2">
-                  <div class="option-card abuse-option" data-value="unfair">
-                    <span class="tag">Theory</span>
-                    <strong>Unfair condition</strong>
-                  </div>
-                  <div class="option-card abuse-option" data-value="exploitative">
-                    <span class="tag">Theory</span>
-                    <strong>Exploitative conduct</strong>
-                  </div>
-                  <div class="option-card abuse-option" data-value="leveraging">
-                    <span class="tag">Theory</span>
-                    <strong>Exclusionary leveraging</strong>
-                  </div>
-                  <div class="option-card abuse-option" data-value="none">
-                    <span class="tag">Theory</span>
-                    <strong>No abuse shown yet</strong>
-                  </div>
-                </div>
-              </div>
-
-              <div class="stage" id="stage8">
-                <div class="question-label">Role perspective</div>
-                <h3 class="question-title">Switch roles and see how the position changes.</h3>
-
-                <div class="card" style="padding:14px; margin-bottom:12px;">
-                  <h4 id="roleTitle">CCI Officer</h4>
-                  <p id="roleDescription">You are assessing whether the facts raise a plausible competition concern.</p>
-                  <div class="pill-row" id="rolePills"></div>
-                </div>
-
-                <div class="role-switcher" id="roleSwitcher">
-                  <button class="role-btn active" data-role="cci" type="button">CCI Officer</button>
-                  <button class="role-btn" data-role="platform" type="button">Platform Counsel</button>
-                  <button class="role-btn" data-role="user" type="button">User Advocate</button>
-                  <button class="role-btn" data-role="privacyreg" type="button">Privacy Regulator</button>
-                </div>
-
-                <div class="card" style="margin-top:12px;">
-                  <h4>Current Position</h4>
-                  <p id="roleArgument">
-                    The issue may involve more than formal consent. Market structure and user dependence may affect whether choice is genuinely meaningful.
-                  </p>
-                </div>
-              </div>
-
-              <div class="stage" id="stage9">
-                <div class="question-label">Remedy desk</div>
-                <h3 class="question-title">What should happen next?</h3>
-
-                <div class="choices" id="decisionChoices">
-                  <button class="choice decision-option" data-value="none" type="button">
-                    <span>No immediate intervention</span><span>1</span>
-                  </button>
-                  <button class="choice decision-option" data-value="privacy" type="button">
-                    <span>Refer to privacy regulator</span><span>2</span>
-                  </button>
-                  <button class="choice decision-option" data-value="competition" type="button">
-                    <span>Open competition inquiry</span><span>3</span>
-                  </button>
-                  <button class="choice decision-option" data-value="coordinated" type="button">
-                    <span>Coordinated regulatory response</span><span>4</span>
-                  </button>
-                  <button class="choice decision-option" data-value="behavioural" type="button">
-                    <span>Behavioural remedy with user choice protections</span><span>5</span>
-                  </button>
-                </div>
-
-                <div class="summary-box" id="summaryBox">
-                  <p id="summaryText"></p>
-                  <p class="muted" id="summarySubtext"></p>
-                </div>
-              </div>
-
-              <div class="footer">
-                <div class="footer-inner">
-                  <button class="btn ghost" id="backBtn" type="button">Back</button>
-                  <button class="btn primary" id="nextBtn" type="button">Next</button>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="mobile-side" id="mobileCaseFile"></div>
-        </div>
-      </section>
-
-      <aside class="side">
-        <div class="panel">
-          <div class="content">
-            <div class="card">
-              <h3>Case File</h3>
-              <p>Your choices update the record as you move through the simulation.</p>
-              <div class="pill-row">
-                <span class="pill" id="pillAction">Action: not chosen</span>
-                <span class="pill" id="pillInstinct">Instinct: not chosen</span>
-                <span class="pill" id="pillJurisdiction">Jurisdiction: not chosen</span>
-                <span class="pill" id="pillMarket">Market: not chosen</span>
-                <span class="pill" id="pillAbuse">Abuse: not chosen</span>
-                <span class="pill" id="pillDecision">Remedy: not chosen</span>
-              </div>
-            </div>
-
-            <div class="card">
-              <h3>System Signals</h3>
-              <div class="metric">
-                <div class="metric-row"><span>Dominance signal</span><span id="dominanceLabel">Low</span></div>
-                <div class="meter" id="dominanceMeter"><span class="on"></span><span></span><span></span><span></span><span></span></div>
-
-                <div class="metric-row"><span>Switching costs</span><span id="switchingLabel">Low</span></div>
-                <div class="meter" id="switchingMeter"><span class="on"></span><span></span><span></span><span></span><span></span></div>
-
-                <div class="metric-row"><span>Consent clarity</span><span id="clarityLabel">High</span></div>
-                <div class="meter" id="clarityMeter"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div>
-              </div>
-            </div>
-
-            <div class="card">
-              <h3>Reasoning Path</h3>
-              <div class="timeline" id="timeline"></div>
-            </div>
-
-            <div class="card">
-              <h3>What to watch</h3>
-              <p>
-                Ask whether the user’s “choice” remains meaningful once network effects, switching costs,
-                opacity of terms, and data advantage are taken into account.
+          <div class="compare-grid">
+            <div class="compare-card">
+              <h4>Formal choice view</h4>
+              <p id="formalChoiceText">
+                The notice is visible. The user has time to read. The user can either accept or leave. On this view, the consent process may appear procedurally sufficient.
               </p>
-              <div class="pill-row">
-                <span class="pill">Meaningful consent</span>
-                <span class="pill">Privacy as quality</span>
-                <span class="pill">Network effects</span>
-                <span class="pill">Regulatory overlap</span>
+            </div>
+            <div class="compare-card">
+              <h4>Relational capability view</h4>
+              <p id="capabilityViewText">
+                Even with time and visibility, autonomy may remain thin because the user cannot negotiate, partially refuse, or continue without accepting, while exit is burdened by network dependence.
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <aside class="panel right glass">
+        <h2>Autonomy-capability model</h2>
+        <p class="panel-desc">
+          These scores estimate whether the user has a real capability to understand, contest, and resist the policy update.
+        </p>
+
+        <div class="model-grid">
+          <div class="metric-card">
+            <div class="metric-top">
+              <div class="metric-name">Interpretive capability</div>
+              <div class="metric-score" id="interpretiveScoreText">0</div>
+            </div>
+            <div class="meter"><div class="meter-fill" id="interpretiveBar"></div></div>
+            <div class="metric-desc" id="interpretiveDesc"></div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-top">
+              <div class="metric-name">Deliberative capability</div>
+              <div class="metric-score" id="deliberativeScoreText">0</div>
+            </div>
+            <div class="meter"><div class="meter-fill" id="deliberativeBar"></div></div>
+            <div class="metric-desc" id="deliberativeDesc"></div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-top">
+              <div class="metric-name">Contestatory capability</div>
+              <div class="metric-score" id="contestatoryScoreText">0</div>
+            </div>
+            <div class="meter"><div class="meter-fill" id="contestatoryBar"></div></div>
+            <div class="metric-desc" id="contestatoryDesc"></div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-top">
+              <div class="metric-name">Exit capability</div>
+              <div class="metric-score" id="exitScoreText">0</div>
+            </div>
+            <div class="meter"><div class="meter-fill" id="exitBar"></div></div>
+            <div class="metric-desc" id="exitDesc"></div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-top">
+              <div class="metric-name">Relational independence</div>
+              <div class="metric-score" id="relationalScoreText">0</div>
+            </div>
+            <div class="meter"><div class="meter-fill" id="relationalBar"></div></div>
+            <div class="metric-desc" id="relationalDesc"></div>
+          </div>
+
+          <div class="overall-card">
+            <div class="overall-score-line">
+              <div>
+                <div class="overall-label">Overall autonomy capability</div>
+                <div class="overall-score" id="overallScoreText">0</div>
               </div>
+              <div class="score-badge score-low" id="overallBadge">Low autonomy</div>
+            </div>
+            <div class="meter"><div class="meter-fill" id="overallBar"></div></div>
+            <div class="metric-desc" id="overallExplanation">
+              Overall autonomy is currently low because contestation is absent and exit is relationally burdened.
             </div>
           </div>
         </div>
       </aside>
-    </main>
-  </div>
+    </section>
 
-  <script>
-    const state = {
-      stage: 1,
-      actionChoice: null,
-      instinct: null,
-      factsRevealed: 0,
-      jurisdiction: null,
-      market: null,
-      dominance: { network: null, lockin: null, data: null },
-      abuse: null,
-      role: "cci",
-      decision: null
-    };
+    <section class="panel glass">
+      <div class="reasoning-wrap">
+        <div>
+          <h2>Reasoning and doctrine</h2>
+          <p class="panel-desc">
+            Shift the legal lens and compare how the same facts are interpreted under different normative frameworks.
+          </p>
+        </div>
 
-    const TOTAL_STEPS = 9;
+        <div class="tab-row">
+          <button class="tab-btn active" data-tab="facts" type="button">Facts</button>
+          <button class="tab-btn" data-tab="autonomy" type="button">Autonomy analysis</button>
+          <button class="tab-btn" data-tab="competition" type="button">Competition concerns</button>
+          <button class="tab-btn" data-tab="counter" type="button">Counterarguments</button>
+          <button class="tab-btn" data-tab="student" type="button">Student prompt</button>
+        </div>
 
-    const roleData = {
-      cci: {
-        title: "CCI Officer",
-        description: "You are assessing whether the facts raise a plausible competition concern.",
-        argument: "The issue may involve more than formal consent. Market structure and user dependence may affect whether choice is genuinely meaningful.",
-        pills: ["Market structure", "User dependence", "Unfair conditions"]
-      },
-      platform: {
-        title: "Platform Counsel",
-        description: "You are defending the policy update as a lawful and voluntary user choice.",
-        argument: "Users remain free to accept, read more, or leave the service. The existence of alternatives weakens any claim of coercion.",
-        pills: ["Formal choice", "Alternative apps", "No forced retention"]
-      },
-      user: {
-        title: "User Advocate",
-        description: "You are arguing that apparent consent may be structurally constrained.",
-        argument: "Formal exit is not meaningful exit when communication networks, family groups, and social participation depend on the platform.",
-        pills: ["Constrained consent", "Social lock-in", "Dependence"]
-      },
-      privacyreg: {
-        title: "Privacy Regulator",
-        description: "You are assessing whether the information and consent process is legally adequate.",
-        argument: "Consent is weakened when terms are opaque, bundled, and difficult to understand at the moment the user is asked to agree.",
-        pills: ["Opacity", "Bundled terms", "Information asymmetry"]
-      }
-    };
+        <div class="tab-panel active" id="tab-facts">
+          <p id="factsText"></p>
+        </div>
 
-    const stageTitles = {
-      1: ["Scenario Prompt", "Read the platform update and respond."],
-      2: ["Initial Instinct", "Give your first legal reaction."],
-      3: ["Fact Reveal", "Unlock structural facts and watch the case change."],
-      4: ["Jurisdiction Check", "Decide whether competition law can engage."],
-      5: ["Relevant Market", "Choose the market definition that fits best."],
-      6: ["Dominance Assessment", "Score the structural factors."],
-      7: ["Abuse Theory", "Identify the strongest theory of abuse."],
-      8: ["Role Perspective", "See how institutions frame the same facts differently."],
-      9: ["Remedy Desk", "Choose the most appropriate next step."]
-    };
+        <div class="tab-panel" id="tab-autonomy">
+          <p id="autonomyText"></p>
+        </div>
 
-    const stageNames = {
-      1: "Trigger",
-      2: "Instinct",
-      3: "Facts",
-      4: "Jurisdiction",
-      5: "Market",
-      6: "Dominance",
-      7: "Abuse",
-      8: "Role",
-      9: "Remedy"
-    };
+        <div class="tab-panel" id="tab-competition">
+          <p id="competitionText"></p>
+        </div>
 
-    const progressMap = {
-      1: 11,
-      2: 22,
-      3: 33,
-      4: 44,
-      5: 56,
-      6: 67,
-      7: 78,
-      8: 89,
-      9: 100
-    };
+        <div class="tab-panel" id="tab-counter">
+          <p id="counterText"></p>
+        </div>
 
-    const screenTitle = document.getElementById("screenTitle");
-    const screenSubtitle = document.getElementById("screenSubtitle");
-    const stageBadge = document.getElementById("stageBadge");
-    const progressStepLabel = document.getElementById("progressStepLabel");
-    const progressStageLabel = document.getElementById("progressStageLabel");
-    const progressBar = document.getElementById("progressBar");
-    const roleBadge = document.getElementById("roleBadge");
-    const nextBtn = document.getElementById("nextBtn");
-    const backBtn = document.getElementById("backBtn");
-
-    const pillAction = document.getElementById("pillAction");
-    const pillInstinct = document.getElementById("pillInstinct");
-    const pillJurisdiction = document.getElementById("pillJurisdiction");
-    const pillMarket = document.getElementById("pillMarket");
-    const pillAbuse = document.getElementById("pillAbuse");
-    const pillDecision = document.getElementById("pillDecision");
-
-    const dominanceLabel = document.getElementById("dominanceLabel");
-    const switchingLabel = document.getElementById("switchingLabel");
-    const clarityLabel = document.getElementById("clarityLabel");
-
-    const dominanceMeter = document.getElementById("dominanceMeter").children;
-    const switchingMeter = document.getElementById("switchingMeter").children;
-    const clarityMeter = document.getElementById("clarityMeter").children;
-
-    const drawerBtn = document.getElementById("drawerBtn");
-    const mobileCaseFile = document.getElementById("mobileCaseFile");
-    const timeline = document.getElementById("timeline");
-
-    const roleTitle = document.getElementById("roleTitle");
-    const roleDescription = document.getElementById("roleDescription");
-    const roleArgument = document.getElementById("roleArgument");
-    const rolePills = document.getElementById("rolePills");
-
-    const summaryBox = document.getElementById("summaryBox");
-    const summaryText = document.getElementById("summaryText");
-    const summarySubtext = document.getElementById("summarySubtext");
-
-    const actionChoices = [...document.querySelectorAll(".action-choice")];
-    const instinctOptions = [...document.querySelectorAll(".instinct-option")];
-    const jurisdictionOptions = [...document.querySelectorAll(".jurisdiction-option")];
-    const marketOptions = [...document.querySelectorAll(".market-option")];
-    const abuseOptions = [...document.querySelectorAll(".abuse-option")];
-    const roleButtons = [...document.querySelectorAll(".role-btn")];
-    const decisionOptions = [...document.querySelectorAll(".decision-option")];
-    const segButtons = [...document.querySelectorAll(".seg-btn")];
-
-    const revealNextBtn = document.getElementById("revealNextBtn");
-
-    function updateStageUI() {
-      document.querySelectorAll(".stage").forEach((el, idx) => {
-        el.classList.toggle("active", idx === state.stage - 1);
-      });
-
-      const [title, subtitle] = stageTitles[state.stage];
-      screenTitle.textContent = title;
-      screenSubtitle.textContent = subtitle;
-      stageBadge.textContent = `Step ${state.stage}`;
-      progressStepLabel.textContent = `Step ${state.stage} of ${TOTAL_STEPS}`;
-      progressStageLabel.textContent = stageNames[state.stage];
-      progressBar.style.width = progressMap[state.stage] + "%";
-
-      backBtn.disabled = state.stage === 1;
-      backBtn.style.opacity = state.stage === 1 ? ".45" : "1";
-
-      nextBtn.disabled = !canAdvance(state.stage);
-      roleBadge.textContent = roleData[state.role].title;
-
-      renderTimeline();
-      renderMobileCaseFile();
-    }
-
-    function canAdvance(stage) {
-      switch(stage) {
-        case 1: return !!state.actionChoice;
-        case 2: return !!state.instinct;
-        case 3: return state.factsRevealed === 3;
-        case 4: return !!state.jurisdiction;
-        case 5: return !!state.market;
-        case 6: return Object.values(state.dominance).every(v => v !== null);
-        case 7: return !!state.abuse;
-        case 8: return true;
-        case 9: return !!state.decision;
-        default: return false;
-      }
-    }
-
-    function goToStage(num) {
-      state.stage = Math.max(1, Math.min(TOTAL_STEPS, num));
-      updateStageUI();
-    }
-
-    function setOptionActive(options, activeValue) {
-      options.forEach(opt => {
-        const val = opt.dataset.value || opt.dataset.role;
-        opt.classList.toggle("active", val === activeValue);
-        if (opt.classList.contains("choice")) {
-          opt.classList.toggle("selected", val === activeValue);
-        }
-      });
-    }
-
-    actionChoices.forEach(btn => {
-      btn.addEventListener("click", () => {
-        state.actionChoice = btn.dataset.value;
-        setOptionActive(actionChoices, state.actionChoice);
-        pillAction.textContent = "Action: " + labelAction(state.actionChoice);
-        updateStageUI();
-      });
-    });
-
-    instinctOptions.forEach(card => {
-      card.addEventListener("click", () => {
-        state.instinct = card.dataset.value;
-        setOptionActive(instinctOptions, state.instinct);
-        pillInstinct.textContent = "Instinct: " + labelInstinct(state.instinct);
-        updateStageUI();
-      });
-    });
-
-    revealNextBtn.addEventListener("click", () => {
-      if (state.factsRevealed < 3) {
-        state.factsRevealed += 1;
-        const factCard = document.getElementById("fact" + state.factsRevealed);
-        factCard.classList.add("revealed");
-        factCard.querySelector(".fact-top span:last-child").textContent = "Unlocked";
-        updateSignalsFromFacts();
-        updateStageUI();
-      }
-      if (state.factsRevealed === 3) {
-        revealNextBtn.disabled = true;
-        revealNextBtn.textContent = "All Facts Revealed";
-      }
-    });
-
-    jurisdictionOptions.forEach(card => {
-      card.addEventListener("click", () => {
-        state.jurisdiction = card.dataset.value;
-        setOptionActive(jurisdictionOptions, state.jurisdiction);
-        pillJurisdiction.textContent = "Jurisdiction: " + labelJurisdiction(state.jurisdiction);
-        updateStageUI();
-      });
-    });
-
-    marketOptions.forEach(card => {
-      card.addEventListener("click", () => {
-        state.market = card.dataset.value;
-        setOptionActive(marketOptions, state.market);
-        pillMarket.textContent = "Market: " + labelMarket(state.market);
-        updateStageUI();
-      });
-    });
-
-    segButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const factor = btn.dataset.factor;
-        const value = btn.dataset.value;
-        state.dominance[factor] = value;
-
-        document.querySelectorAll(`.seg-btn[data-factor="${factor}"]`).forEach(b => {
-          b.classList.toggle("active", b.dataset.value === value);
-        });
-
-        const levelText = ["", "Low", "Moderate", "High", "Very high"][parseInt(value, 10)];
-        document.getElementById(`${factor}Level`).textContent = levelText;
-        updateSignalsFromDominance();
-        updateStageUI();
-      });
-    });
-
-    abuseOptions.forEach(card => {
-      card.addEventListener("click", () => {
-        state.abuse = card.dataset.value;
-        setOptionActive(abuseOptions, state.abuse);
-        pillAbuse.textContent = "Abuse: " + labelAbuse(state.abuse);
-        updateStageUI();
-      });
-    });
-
-    roleButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        state.role = btn.dataset.role;
-        roleButtons.forEach(b => b.classList.toggle("active", b.dataset.role === state.role));
-        renderRole();
-        updateStageUI();
-      });
-    });
-
-    decisionOptions.forEach(btn => {
-      btn.addEventListener("click", () => {
-        state.decision = btn.dataset.value;
-        setOptionActive(decisionOptions, state.decision);
-        pillDecision.textContent = "Remedy: " + labelDecision(state.decision);
-        renderSummary();
-        summaryBox.classList.add("show");
-        updateStageUI();
-      });
-    });
-
-    nextBtn.addEventListener("click", () => {
-      if (state.stage < TOTAL_STEPS && canAdvance(state.stage)) goToStage(state.stage + 1);
-    });
-
-    backBtn.addEventListener("click", () => {
-      if (state.stage > 1) goToStage(state.stage - 1);
-    });
-
-    drawerBtn.addEventListener("click", () => {
-      if (mobileCaseFile.style.display === "grid") {
-        mobileCaseFile.style.display = "none";
-        drawerBtn.textContent = "Show Case File";
-      } else {
-        mobileCaseFile.style.display = "grid";
-        drawerBtn.textContent = "Hide Case File";
-      }
-    });
-
-    function renderRole() {
-      const data = roleData[state.role];
-      roleTitle.textContent = data.title;
-      roleDescription.textContent = data.description;
-      roleArgument.textContent = data.argument;
-      rolePills.innerHTML = data.pills.map(p => `<span class="pill">${p}</span>`).join("");
-    }
-
-    function updateSignalsFromFacts() {
-      const dominanceLevel = Math.min(1 + state.factsRevealed, 4);
-      const switchingLevel = Math.min(1 + state.factsRevealed, 4);
-      const clarityLevel = Math.max(1, 4 - state.factsRevealed);
-
-      fillMeter(dominanceMeter, dominanceLevel);
-      fillMeter(switchingMeter, switchingLevel);
-      fillMeter(clarityMeter, clarityLevel);
-
-      dominanceLabel.textContent = ["Low", "Moderate", "Elevated", "High", "Very high"][dominanceLevel - 1];
-      switchingLabel.textContent = ["Low", "Moderate", "Elevated", "High", "Very high"][switchingLevel - 1];
-      clarityLabel.textContent = ["Opaque", "Low", "Mixed", "Moderate", "High"][clarityLevel - 1];
-    }
-
-    function updateSignalsFromDominance() {
-      const vals = Object.values(state.dominance).filter(v => v !== null).map(v => parseInt(v, 10));
-      if (!vals.length) return;
-      const avg = Math.round(vals.reduce((a,b)=>a+b,0) / vals.length);
-
-      fillMeter(dominanceMeter, Math.min(5, avg + 1));
-      dominanceLabel.textContent = ["Low", "Moderate", "Elevated", "High", "Very high"][Math.min(4, avg) - 1] || "Moderate";
-
-      if (state.dominance.lockin) {
-        const l = parseInt(state.dominance.lockin, 10);
-        fillMeter(switchingMeter, Math.min(5, l + 1));
-        switchingLabel.textContent = ["Low", "Moderate", "Elevated", "High", "Very high"][Math.min(4, l) - 1] || "Moderate";
-      }
-    }
-
-    function fillMeter(nodes, level) {
-      [...nodes].forEach((n, idx) => n.classList.toggle("on", idx < level));
-    }
-
-    function labelAction(v) {
-      return {
-        accept: "Accept and Continue",
-        learn: "Learn More",
-        exit: "Exit Platform"
-      }[v] || "not chosen";
-    }
-
-    function labelInstinct(v) {
-      return {
-        valid: "Valid consent",
-        privacy: "Privacy issue",
-        competition: "Competition issue",
-        mixed: "Mixed regulatory issue"
-      }[v] || "not chosen";
-    }
-
-    function labelJurisdiction(v) {
-      return {
-        yes: "Both can be relevant",
-        no: "Privacy law only",
-        secondary: "Competition law only secondarily",
-        uncertain: "Uncertain"
-      }[v] || "not chosen";
-    }
-
-    function labelMarket(v) {
-      return {
-        "all-digital": "All digital attention markets",
-        "social-media": "Online social media generally",
-        "communication": "Consumer communication services",
-        "ott-msg": "OTT messaging apps through smartphones in India"
-      }[v] || "not chosen";
-    }
-
-    function labelAbuse(v) {
-      return {
-        unfair: "Unfair condition",
-        exploitative: "Exploitative conduct",
-        leveraging: "Exclusionary leveraging",
-        none: "No abuse shown yet"
-      }[v] || "not chosen";
-    }
-
-    function labelDecision(v) {
-      return {
-        none: "No immediate intervention",
-        privacy: "Refer to privacy regulator",
-        competition: "Open competition inquiry",
-        coordinated: "Coordinated regulatory response",
-        behavioural: "Behavioural remedy with user choice protections"
-      }[v] || "not chosen";
-    }
-
-    function renderTimeline() {
-      const items = [];
-
-      if (state.actionChoice) items.push(["Action selected", labelAction(state.actionChoice)]);
-      if (state.instinct) items.push(["Initial instinct", labelInstinct(state.instinct)]);
-      if (state.factsRevealed) items.push(["Facts revealed", `${state.factsRevealed} of 3 unlocked`]);
-      if (state.jurisdiction) items.push(["Jurisdiction", labelJurisdiction(state.jurisdiction)]);
-      if (state.market) items.push(["Market selected", labelMarket(state.market)]);
-      if (Object.values(state.dominance).some(v => v !== null)) {
-        const d = [];
-        if (state.dominance.network) d.push(`Network ${["","Low","Moderate","High","Very high"][state.dominance.network]}`);
-        if (state.dominance.lockin) d.push(`Lock-in ${["","Low","Moderate","High","Very high"][state.dominance.lockin]}`);
-        if (state.dominance.data) d.push(`Data ${["","Low","Moderate","High","Very high"][state.dominance.data]}`);
-        items.push(["Dominance factors", d.join(" · ")]);
-      }
-      if (state.abuse) items.push(["Abuse theory", labelAbuse(state.abuse)]);
-      if (state.decision) items.push(["Remedy", labelDecision(state.decision)]);
-
-      timeline.innerHTML = items.length
-        ? items.map(([a,b]) => `
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div>
-              <strong>${a}</strong>
-              <span>${b}</span>
-            </div>
-          </div>`).join("")
-        : `<div class="timeline-item"><div class="timeline-dot"></div><div><strong>No entries yet</strong><span>Your reasoning path will appear here.</span></div></div>`;
-    }
-
-    function renderSummary() {
-      let primary = "";
-      let sub = "";
-
-      if (state.decision === "none") {
-        primary = "You decided that the current record does not yet justify regulatory intervention.";
-        sub = "This gives greater weight to formal user choice or treats the evidentiary threshold for intervention as unmet.";
-      } else if (state.decision === "privacy") {
-        primary = "You decided that the strongest concern lies in notice, transparency, and consent quality.";
-        sub = "This places the centre of gravity in privacy governance, even if competition concerns remain in the background.";
-      } else if (state.decision === "competition") {
-        primary = "You decided that a competition inquiry is warranted because market structure may be distorting meaningful choice.";
-        sub = "This treats privacy degradation as relevant to competition once user dependence, network effects, and asymmetry are considered.";
-      } else if (state.decision === "coordinated") {
-        primary = "You decided that the problem crosses legal domains and requires coordinated regulatory attention.";
-        sub = "This reflects a view that both consent quality and market structure are central to the case.";
-      } else if (state.decision === "behavioural") {
-        primary = "You decided that the best response is a behavioural remedy that restores user choice and limits coercive data-sharing conditions.";
-        sub = "This emphasizes opt-out rights, transparency, and decoupling access from broad cross-platform data sharing.";
-      }
-
-      summaryText.textContent = primary;
-      summarySubtext.textContent = sub;
-    }
-
-    function renderMobileCaseFile() {
-      mobileCaseFile.innerHTML = `
-        <div class="panel">
-          <div class="content">
-            <div class="card">
-              <h3>Case File</h3>
-              <div class="pill-row">
-                <span class="pill">${pillAction.textContent}</span>
-                <span class="pill">${pillInstinct.textContent}</span>
-                <span class="pill">${pillJurisdiction.textContent}</span>
-                <span class="pill">${pillMarket.textContent}</span>
-                <span class="pill">${pillAbuse.textContent}</span>
-                <span class="pill">${pillDecision.textContent}</span>
-              </div>
-            </div>
-
-            <div class="card">
-              <h3>System Signals</h3>
-              <div class="metric">
-                <div class="metric-row"><span>Dominance signal</span><span>${dominanceLabel.textContent}</span></div>
-                <div class="metric-row"><span>Switching costs</span><span>${switchingLabel.textContent}</span></div>
-                <div class="metric-row"><span>Consent clarity</span><span>${clarityLabel.textContent}</span></div>
-              </div>
+        <div class="tab-panel" id="tab-student">
+          <div class="student-prompt">
+            <strong>Reflective question</strong>
+            <div id="studentPromptText">
+              Does visible notice and adequate time to read the policy cure the autonomy problem when the user cannot reject the updated terms without leaving the platform?
             </div>
           </div>
         </div>
-      `;
+
+        <div class="footer-note">
+          This prototype is a pedagogical model. It does not mechanically determine legal liability. Its purpose is to help students see how binary formal choice can diverge from real choice freedom in a dominant digital platform environment.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const controls = {
+      noticeVisibility: document.getElementById("noticeVisibility"),
+      reviewTime: document.getElementById("reviewTime"),
+      readability: document.getElementById("readability"),
+      partialRefusal: document.getElementById("partialRefusal"),
+      negotiability: document.getElementById("negotiability"),
+      continueWithoutAccept: document.getElementById("continueWithoutAccept"),
+      digitalLiteracy: document.getElementById("digitalLiteracy"),
+      privacyConcern: document.getElementById("privacyConcern"),
+      switchTolerance: document.getElementById("switchTolerance"),
+      networkDependence: document.getElementById("networkDependence"),
+      switchingCost: document.getElementById("switchingCost"),
+      alternativeViability: document.getElementById("alternativeViability"),
+      dominance: document.getElementById("dominance")
+    };
+
+    const valueLabels = {
+      noticeVisibility: document.getElementById("noticeVisibilityVal"),
+      reviewTime: document.getElementById("reviewTimeVal"),
+      readability: document.getElementById("readabilityVal"),
+      partialRefusal: document.getElementById("partialRefusalVal"),
+      negotiability: document.getElementById("negotiabilityVal"),
+      continueWithoutAccept: document.getElementById("continueWithoutAcceptVal"),
+      digitalLiteracy: document.getElementById("digitalLiteracyVal"),
+      privacyConcern: document.getElementById("privacyConcernVal"),
+      switchTolerance: document.getElementById("switchToleranceVal"),
+      networkDependence: document.getElementById("networkDependenceVal"),
+      switchingCost: document.getElementById("switchingCostVal"),
+      alternativeViability: document.getElementById("alternativeViabilityVal"),
+      dominance: document.getElementById("dominanceVal")
+    };
+
+    const personaSelect = document.getElementById("personaSelect");
+    const lensSelect = document.getElementById("lensSelect");
+    const resetBtn = document.getElementById("resetBtn");
+
+    const profiles = {
+      student: {
+        digitalLiteracy: 6,
+        privacyConcern: 6,
+        switchTolerance: 4,
+        networkDependence: 8,
+        switchingCost: 7,
+        alternativeViability: 4
+      },
+      smallbiz: {
+        digitalLiteracy: 6,
+        privacyConcern: 5,
+        switchTolerance: 3,
+        networkDependence: 9,
+        switchingCost: 9,
+        alternativeViability: 3
+      },
+      elderly: {
+        digitalLiteracy: 3,
+        privacyConcern: 5,
+        switchTolerance: 2,
+        networkDependence: 9,
+        switchingCost: 9,
+        alternativeViability: 2
+      },
+      professional: {
+        digitalLiteracy: 8,
+        privacyConcern: 9,
+        switchTolerance: 5,
+        networkDependence: 7,
+        switchingCost: 6,
+        alternativeViability: 5
+      },
+      gigworker: {
+        digitalLiteracy: 5,
+        privacyConcern: 4,
+        switchTolerance: 3,
+        networkDependence: 9,
+        switchingCost: 8,
+        alternativeViability: 3
+      }
+    };
+
+    const defaults = {
+      noticeVisibility: 8,
+      reviewTime: 9,
+      readability: 5,
+      partialRefusal: 0,
+      negotiability: 0,
+      continueWithoutAccept: 0,
+      digitalLiteracy: 6,
+      privacyConcern: 7,
+      switchTolerance: 4,
+      networkDependence: 9,
+      switchingCost: 8,
+      alternativeViability: 3,
+      dominance: 9
+    };
+
+    function clamp(num, min, max) {
+      return Math.max(min, Math.min(max, num));
     }
 
-    function resetState() {
-      state.stage = 1;
-      state.actionChoice = null;
-      state.instinct = null;
-      state.factsRevealed = 0;
-      state.jurisdiction = null;
-      state.market = null;
-      state.dominance = { network: null, lockin: null, data: null };
-      state.abuse = null;
-      state.role = "cci";
-      state.decision = null;
+    function normalize(v) {
+      return clamp(v / 10, 0, 1);
+    }
 
-      setOptionActive(actionChoices, null);
-      setOptionActive(instinctOptions, null);
-      setOptionActive(jurisdictionOptions, null);
-      setOptionActive(marketOptions, null);
-      setOptionActive(abuseOptions, null);
-      setOptionActive(decisionOptions, null);
+    function logistic(x) {
+      return 1 / (1 + Math.exp(-x));
+    }
 
-      roleButtons.forEach(b => b.classList.toggle("active", b.dataset.role === "cci"));
-      document.querySelectorAll(".fact-card").forEach(card => {
-        card.classList.remove("revealed");
-        card.querySelector(".fact-top span:last-child").textContent = "Locked";
+    function scoreToText(score) {
+      if (score < 35) return "low";
+      if (score < 70) return "moderate";
+      return "high";
+    }
+
+    function badgeClass(score) {
+      if (score < 35) return "score-low";
+      if (score < 70) return "score-mid";
+      return "score-high";
+    }
+
+    function setBar(id, score) {
+      document.getElementById(id).style.width = `${score}%`;
+    }
+
+    function setMetricText(score, textId) {
+      document.getElementById(textId).textContent = `${Math.round(score)}/100`;
+    }
+
+    function updateValueLabels() {
+      Object.keys(controls).forEach(key => {
+        valueLabels[key].textContent = controls[key].value;
       });
-
-      revealNextBtn.disabled = false;
-      revealNextBtn.textContent = "Reveal Next Fact";
-
-      pillAction.textContent = "Action: not chosen";
-      pillInstinct.textContent = "Instinct: not chosen";
-      pillJurisdiction.textContent = "Jurisdiction: not chosen";
-      pillMarket.textContent = "Market: not chosen";
-      pillAbuse.textContent = "Abuse: not chosen";
-      pillDecision.textContent = "Remedy: not chosen";
-
-      document.getElementById("networkLevel").textContent = "Not selected";
-      document.getElementById("lockinLevel").textContent = "Not selected";
-      document.getElementById("dataLevel").textContent = "Not selected";
-      document.querySelectorAll(".seg-btn").forEach(b => b.classList.remove("active"));
-
-      fillMeter(dominanceMeter, 1);
-      fillMeter(switchingMeter, 1);
-      fillMeter(clarityMeter, 4);
-      dominanceLabel.textContent = "Low";
-      switchingLabel.textContent = "Low";
-      clarityLabel.textContent = "High";
-
-      summaryBox.classList.remove("show");
-
-      renderRole();
-      updateStageUI();
     }
 
-    renderRole();
-    renderTimeline();
-    updateStageUI();
+    function applyPersona(name) {
+      const profile = profiles[name];
+      if (!profile) return;
+      Object.entries(profile).forEach(([key, value]) => {
+        controls[key].value = value;
+      });
+      updateValueLabels();
+      render();
+    }
 
-    // Optional keyboard navigation
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowRight" && canAdvance(state.stage) && state.stage < TOTAL_STEPS) goToStage(state.stage + 1);
-      if (e.key === "ArrowLeft" && state.stage > 1) goToStage(state.stage - 1);
-      if (e.key.toLowerCase() === "r") resetState();
+    function resetScenario() {
+      Object.entries(defaults).forEach(([key, value]) => {
+        controls[key].value = value;
+      });
+      personaSelect.value = "student";
+      lensSelect.value = "competition";
+      updateValueLabels();
+      render();
+    }
+
+    function computeModel() {
+      const noticeVisibility = Number(controls.noticeVisibility.value);
+      const reviewTime = Number(controls.reviewTime.value);
+      const readability = Number(controls.readability.value);
+      const partialRefusal = Number(controls.partialRefusal.value);
+      const negotiability = Number(controls.negotiability.value);
+      const continueWithoutAccept = Number(controls.continueWithoutAccept.value);
+      const digitalLiteracy = Number(controls.digitalLiteracy.value);
+      const privacyConcern = Number(controls.privacyConcern.value);
+      const switchTolerance = Number(controls.switchTolerance.value);
+      const networkDependence = Number(controls.networkDependence.value);
+      const switchingCost = Number(controls.switchingCost.value);
+      const alternativeViability = Number(controls.alternativeViability.value);
+      const dominance = Number(controls.dominance.value);
+
+      const interpretive = clamp(
+        100 * (
+          0.28 * normalize(noticeVisibility) +
+          0.26 * normalize(reviewTime) +
+          0.24 * normalize(readability) +
+          0.22 * normalize(digitalLiteracy)
+        ),
+        0, 100
+      );
+
+      const deliberative = clamp(
+        100 * (
+          0.22 * normalize(reviewTime) +
+          0.22 * normalize(readability) +
+          0.16 * normalize(digitalLiteracy) +
+          0.2 * normalize(privacyConcern) +
+          0.2 * (1 - normalize(networkDependence))
+        ),
+        0, 100
+      );
+
+      const contestatory = clamp(
+        100 * (
+          0.36 * normalize(partialRefusal) +
+          0.32 * normalize(negotiability) +
+          0.32 * normalize(continueWithoutAccept)
+        ),
+        0, 100
+      );
+
+      const exitRaw = logistic(
+        -0.2 +
+        1.2 * normalize(alternativeViability) +
+        0.7 * normalize(switchTolerance) -
+        1.3 * normalize(networkDependence) -
+        1.1 * normalize(switchingCost) -
+        0.6 * normalize(dominance)
+      );
+
+      const exitCapability = clamp(exitRaw * 100, 0, 100);
+
+      const relationalIndependence = clamp(
+        100 * (
+          1 -
+          (0.4 * normalize(networkDependence) +
+           0.3 * normalize(switchingCost) +
+           0.2 * normalize(dominance) -
+           0.1 * normalize(alternativeViability))
+        ),
+        0, 100
+      );
+
+      const overall =
+        0.22 * interpretive +
+        0.18 * deliberative +
+        0.22 * contestatory +
+        0.2 * exitCapability +
+        0.18 * relationalIndependence;
+
+      let competitionConcern = clamp(
+        100 * (
+          0.28 * normalize(dominance) +
+          0.25 * normalize(networkDependence) +
+          0.18 * normalize(switchingCost) +
+          0.2 * (1 - normalize(contestatory / 10)) +
+          0.09 * (1 - normalize(exitCapability / 10))
+        ),
+        0, 100
+      );
+
+      return {
+        noticeVisibility,
+        reviewTime,
+        readability,
+        partialRefusal,
+        negotiability,
+        continueWithoutAccept,
+        digitalLiteracy,
+        privacyConcern,
+        switchTolerance,
+        networkDependence,
+        switchingCost,
+        alternativeViability,
+        dominance,
+        interpretive: Math.round(interpretive),
+        deliberative: Math.round(deliberative),
+        contestatory: Math.round(contestatory),
+        exitCapability: Math.round(exitCapability),
+        relationalIndependence: Math.round(relationalIndependence),
+        overall: Math.round(overall),
+        competitionConcern: Math.round(competitionConcern)
+      };
+    }
+
+    function renderSimulation(data) {
+      document.getElementById("caseTimeText").textContent = `Review window: ${data.reviewTime}/10`;
+
+      const noticeChip = document.getElementById("noticeChip");
+      noticeChip.textContent =
+        data.noticeVisibility >= 7 ? "Prominent update notice" :
+        data.noticeVisibility >= 4 ? "Visible but less salient notice" :
+        "Low-visibility notice";
+
+      const readabilityText =
+        data.readability >= 7 ? "high" :
+        data.readability >= 4 ? "medium" : "low";
+
+      document.getElementById("metaReadability").textContent = `Readability: ${readabilityText}`;
+
+      let choiceText = "Choice architecture: accept or exit";
+      if (data.partialRefusal >= 5 || data.negotiability >= 5 || data.continueWithoutAccept >= 5) {
+        choiceText = "Choice architecture: layered, more contestable";
+      }
+      document.getElementById("metaChoice").textContent = choiceText;
+
+      const networkText =
+        data.networkDependence >= 8 ? "Network dependence: very high" :
+        data.networkDependence >= 5 ? "Network dependence: moderate" :
+        "Network dependence: lower";
+      document.getElementById("metaNetwork").textContent = networkText;
+
+      let summary = "";
+      if (data.contestatory <= 10) {
+        summary = "The policy update is visible and the user may have time to review it, but continued use still depends on accepting the revised terms as they stand.";
+      } else {
+        summary = "The policy update remains important, but the user now has some room to resist, tailor, or withhold acceptance without facing an immediate all-or-nothing outcome.";
+      }
+      document.getElementById("policySummary").textContent = summary;
+
+      const actions = document.getElementById("policyActions");
+      actions.innerHTML = `
+        <button class="action-btn action-primary" type="button">Accept and continue</button>
+        <button class="action-btn action-secondary" type="button">Review policy details</button>
+        ${data.partialRefusal >= 5 ? '<button class="action-btn action-secondary" type="button">Refuse selected data uses</button>' : ''}
+        ${data.continueWithoutAccept >= 5 ? '<button class="action-btn action-secondary" type="button">Continue without accepting</button>' : ''}
+        ${data.negotiability >= 5 ? '<button class="action-btn action-secondary" type="button">Request alternative terms</button>' : ''}
+        <button class="action-btn action-muted" type="button">Exit WhatsApp</button>
+      `;
+
+      document.getElementById("contestOptionsText").textContent =
+        data.contestatory < 15 ? "Absent" :
+        data.contestatory < 50 ? "Narrow" : "Meaningful";
+
+      document.getElementById("exitEnvText").textContent =
+        data.exitCapability < 30 ? "Relationally costly" :
+        data.exitCapability < 60 ? "Difficult but possible" : "More feasible";
+
+      document.getElementById("tensionText").textContent =
+        data.contestatory < 15
+          ? "Visible notice, narrow choice"
+          : "Notice plus some refusal space";
+
+      document.getElementById("formalChoiceText").textContent =
+        data.noticeVisibility >= 7 && data.reviewTime >= 7
+          ? "The notice is prominent and the review window is substantial. A formal-choice account may say the user had enough procedural opportunity to respond."
+          : "The notice architecture itself is weaker here, so even a formal-choice account becomes less comfortable with the consent process.";
+
+      document.getElementById("capabilityViewText").textContent =
+        data.contestatory < 15
+          ? "Even with time and visibility, autonomy remains constrained because the user cannot negotiate, partially refuse, or continue without accepting, while exit is burdened by network dependence."
+          : "The user’s autonomy is stronger here because contestatory capability is no longer absent and the field of response is more than binary accept-or-exit.";
+    }
+
+    function renderMetrics(data) {
+      setMetricText(data.interpretive, "interpretiveScoreText");
+      setMetricText(data.deliberative, "deliberativeScoreText");
+      setMetricText(data.contestatory, "contestatoryScoreText");
+      setMetricText(data.exitCapability, "exitScoreText");
+      setMetricText(data.relationalIndependence, "relationalScoreText");
+
+      setBar("interpretiveBar", data.interpretive);
+      setBar("deliberativeBar", data.deliberative);
+      setBar("contestatoryBar", data.contestatory);
+      setBar("exitBar", data.exitCapability);
+      setBar("relationalBar", data.relationalIndependence);
+      setBar("overallBar", data.overall);
+
+      document.getElementById("interpretiveDesc").textContent =
+        `Interpretive capability is ${scoreToText(data.interpretive)}. It depends on visibility, review time, readability, and the user’s digital literacy.`;
+
+      document.getElementById("deliberativeDesc").textContent =
+        `Deliberative capability is ${scoreToText(data.deliberative)}. This asks whether the user can reflect meaningfully on consequences rather than merely react to a notice.`;
+
+      document.getElementById("contestatoryDesc").textContent =
+        data.contestatory < 15
+          ? "Contestatory capability is very low because the user cannot modify, withhold, or selectively refuse the updated terms."
+          : "Contestatory capability improves when the user can refuse selected data uses, negotiate terms, or continue without immediate forced acceptance.";
+
+      document.getElementById("exitDesc").textContent =
+        data.exitCapability < 30
+          ? "Exit capability is weak because alternatives are less viable and leaving involves high social and practical costs."
+          : "Exit capability rises when alternatives become viable and the relational burden of leaving becomes less severe.";
+
+      document.getElementById("relationalDesc").textContent =
+        data.relationalIndependence < 35
+          ? "Relational independence is low because the user’s communication environment is tightly coupled to the platform."
+          : "Relational independence improves as the user becomes less hostage to others’ continued use of the platform.";
+
+      document.getElementById("overallScoreText").textContent = `${data.overall}/100`;
+
+      const badge = document.getElementById("overallBadge");
+      badge.className = `score-badge ${badgeClass(data.overall)}`;
+      badge.textContent =
+        data.overall < 35 ? "Low autonomy" :
+        data.overall < 70 ? "Moderate autonomy" : "Higher autonomy";
+
+      document.getElementById("overallExplanation").textContent =
+        data.contestatory < 15 && data.exitCapability < 40
+          ? "Overall autonomy is compressed. The user may understand the notice, but cannot shape the terms and faces a costly exit environment."
+          : data.contestatory < 15
+          ? "Overall autonomy remains weak because the user still lacks meaningful contestatory options despite improved notice conditions."
+          : "Overall autonomy improves as the user gains more than a binary accept-or-exit response set.";
+    }
+
+    function renderReasoning(data) {
+      const lens = lensSelect.value;
+
+      document.getElementById("factsText").innerHTML = `
+        In this scenario, the privacy policy update is shown with <span class="highlight">${data.noticeVisibility}/10</span> visibility,
+        the user has <span class="highlight">${data.reviewTime}/10</span> review time, and the policy readability is
+        <span class="highlight">${data.readability}/10</span>. Contestatory space remains at
+        <span class="highlight">${data.contestatory}/100</span>, while exit capability stands at
+        <span class="highlight">${data.exitCapability}/100</span>. Network dependence is
+        <span class="highlight">${data.networkDependence}/10</span>, switching cost is
+        <span class="highlight">${data.switchingCost}/10</span>, and dominance is
+        <span class="highlight">${data.dominance}/10</span>.
+      `;
+
+      let autonomyText = `
+        The model shows that autonomy is not exhausted by whether the user saw the policy or had time to read it.
+        Here, interpretive capability is <span class="highlight">${data.interpretive}/100</span>, but contestatory capability is
+        <span class="highlight">${data.contestatory}/100</span>. That gap matters. A user may understand the new terms and still
+        lack a real capability to refuse or shape them.
+      `;
+
+      if (data.contestatory < 15) {
+        autonomyText += ` The autonomy problem therefore lies in <span class="highlight">capability compression</span> rather than mere informational deficiency.`;
+      } else {
+        autonomyText += ` Because the user has some room to resist or tailor the policy response, the autonomy deficit is less severe than in a strict take-it-or-leave-it setting.`;
+      }
+
+      let competitionText = "";
+      if (lens === "competition") {
+        competitionText = `
+          From a competition-law lens, the key question is not simply privacy in the abstract but whether a dominant platform
+          imposes a condition that users cannot realistically resist. Dominance is currently
+          <span class="highlight">${data.dominance}/10</span> and competition concern is
+          <span class="highlight">${data.competitionConcern}/100</span>. When contestation is absent and exit is weakened by network dependence,
+          the condition begins to look more plausibly <span class="highlight">unfair in a dominance setting</span>.
+        `;
+      } else if (lens === "consumer") {
+        competitionText = `
+          From a consumer-law lens, the concern centers on whether the decision environment is fair, intelligible, and non-coercive.
+          Even visible notice may not be enough when the architecture forces a binary surrender of rights or exclusion from the service.
+        `;
+      } else if (lens === "data") {
+        competitionText = `
+          From a data-protection lens, the question becomes whether consent is meaningful when it is bundled, non-granular,
+          and tied to continued access. Visible notice can improve transparency, but it does not automatically generate meaningful control.
+        `;
+      } else {
+        competitionText = `
+          From an autonomy-theory lens, the case highlights the difference between procedural awareness and substantive freedom.
+          The real issue is whether the person has a meaningful space to refuse, revise, and continue social life without disproportionate penalty.
+        `;
+      }
+
+      let counterText = `
+        A counterargument is that the user still has a choice: accept the policy or leave the platform.
+        Another counterargument is that notice visibility and long review windows make the process sufficiently fair.
+      `;
+
+      if (data.noticeVisibility >= 7 && data.reviewTime >= 7) {
+        counterText += ` That argument becomes stronger where the platform gives the user clear notice and substantial time to consider the update.`;
+      } else {
+        counterText += ` That argument weakens where the notice itself is poorly presented or rushed.`;
+      }
+
+      counterText += ` The lab, however, invites students to ask whether a <span class="highlight">binary exit option</span> is enough when communication, groups, and social coordination are strongly locked into the same service.`;
+
+      const studentPrompt =
+        data.contestatory < 15
+          ? "Does visible notice and adequate review time cure the autonomy problem where the user still cannot continue using the platform without accepting revised terms?"
+          : "If the platform adds partial refusal and continue-without-accept options, does the competition concern weaken even if the platform remains dominant?";
+
+      document.getElementById("autonomyText").innerHTML = autonomyText;
+      document.getElementById("competitionText").innerHTML = competitionText;
+      document.getElementById("counterText").innerHTML = counterText;
+      document.getElementById("studentPromptText").textContent = studentPrompt;
+    }
+
+    function render() {
+      const data = computeModel();
+      renderSimulation(data);
+      renderMetrics(data);
+      renderReasoning(data);
+    }
+
+    Object.entries(controls).forEach(([key, el]) => {
+      el.addEventListener("input", () => {
+        valueLabels[key].textContent = el.value;
+        render();
+      });
     });
+
+    personaSelect.addEventListener("change", (e) => {
+      applyPersona(e.target.value);
+    });
+
+    lensSelect.addEventListener("change", render);
+
+    resetBtn.addEventListener("click", resetScenario);
+
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(`tab-${btn.dataset.tab}`).classList.add("active");
+      });
+    });
+
+    updateValueLabels();
+    render();
   </script>
 </body>
 </html>
